@@ -1,6 +1,6 @@
 <template>
     <div class="space-x-3 items-center">
-        <div class="text-sm text-gray-600">{{ label }}:</div>
+        <div class="text-sm text-gray-600">{{ label }}</div>
         <div class="font-bold">{{ value }}</div>
     </div>
 </template>

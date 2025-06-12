@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { useIDBKeyval } from "@vueuse/integrations/useIDBKeyval.mjs";
 import type { Survey } from "@/types/survey";
-import { testSurveys } from "@/data/test/surveys";
 
 export const useSurveysStore = defineStore('surveys', () => {
-    const items = ref<Survey[]>([...testSurveys])
+    const { data: items, isFinished } = useIDBKeyval<Survey[]>(
+        'dc97-surveys',
+        []
+    )
 
     const getByFacility = (whq: string) => {
         const surveys = items.value
@@ -17,8 +19,22 @@ export const useSurveysStore = defineStore('surveys', () => {
         }
     }
 
+    const add = (survey: Survey) => {
+        const exist = items.value.find(f => f.uniqueKey === survey.uniqueKey);
+        if (!exist) {
+            items.value.push(survey)
+        }
+    }
+
+    const remove = (uniqueKey: string) => {
+        items.value = items.value.filter(f => f.uniqueKey !== uniqueKey);
+        // cascade delete elements
+    }
+
     return {
         items,
+        add,
+        remove,
         getByFacility
     }
 })

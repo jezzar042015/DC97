@@ -1,4 +1,5 @@
 export interface Building {
+    facilityWhq: string
     whq: string
     name: string
     levels: number

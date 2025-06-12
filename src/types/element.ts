@@ -1,9 +1,9 @@
 import type { ElementSurvey } from "./elementSurvey"
 
 export interface Element {
-    buidlingWhq: string
+    whq: string
     componentId: number
-    category: string
+    category: SurveyCategory
     costCode: string
     num: number
     uniqueKey: string //num_component
@@ -15,5 +15,6 @@ export interface Element {
     newSurvey?: ElementSurvey
 }
 
-type ElementUnit = 'A' | 'L' | 'N'
-export type ConditionNumber = 1 | 2 | 3 | 4 
+export type ElementUnit = 'A' | 'L' | 'N'
+export type ConditionNumber = 1 | 2 | 3 | 4
+export type SurveyCategory = 'Site' | 'Building' | 'Level' 

@@ -4,7 +4,7 @@
             <span class="text-sm uppercase">{{ facility.primaryUse }}</span>
             <span class="text-xs">{{ facility.whq }}</span>
         </div>
-        <div class="font-bold text-lg">{{ facility.location }}</div>
+        <div class="font-bold text-lg text-amber-600">{{ facility.location }}</div>
         <div class="space-x-2">
             <span class="text-sm">Previous Evaluation:</span>
             <span>{{ previousFEV }}</span>

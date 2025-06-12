@@ -3,7 +3,7 @@ import type { ConditionNumber, Element } from "./element"
 export interface ElementSurvey {
     surveyKey: string
     key: string
-    element: Element
+    element?: Element
     qty: number | null
     lastYear: number | null
     condition: ConditionNumber | null
