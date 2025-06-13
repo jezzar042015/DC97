@@ -1,12 +1,25 @@
 import { defineStore } from "pinia";
 import { useIDBKeyval } from "@vueuse/integrations/useIDBKeyval.mjs";
 import type { Survey } from "@/types/survey";
+import { watch } from "vue";
 
 export const useSurveysStore = defineStore('surveys', () => {
     const { data: items, isFinished } = useIDBKeyval<Survey[]>(
         'dc97-surveys',
         []
     )
+
+    const waitUntilFinished = async () => {
+        if (isFinished.value) return;
+        await new Promise<void>((resolve) => {
+            const stop = watch(isFinished, (val) => {
+                if (val) {
+                    stop();
+                    resolve();
+                }
+            });
+        });
+    };
 
     const getByFacility = (whq: string) => {
         const surveys = items.value
@@ -26,15 +39,22 @@ export const useSurveysStore = defineStore('surveys', () => {
         }
     }
 
-    const remove = (uniqueKey: string) => {
+    const remove = async (uniqueKey: string) => {
         items.value = items.value.filter(f => f.uniqueKey !== uniqueKey);
-        // cascade delete elements
+        await waitUntilFinished();
+    }
+
+    const batchRemove = async (whq: string) => {
+        const filtered = items.value.filter(s => s.whq !== whq);
+        items.value = JSON.parse(JSON.stringify(filtered));
+        await waitUntilFinished();
     }
 
     return {
         items,
         add,
         remove,
-        getByFacility
+        getByFacility,
+        batchRemove
     }
 })

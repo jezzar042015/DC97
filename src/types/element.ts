@@ -1,9 +1,11 @@
 import type { ElementSurvey } from "./elementSurvey"
 
 export interface Element {
+    srcRow: number
     whq: string
     componentId: number
     category: SurveyCategory
+    categoryGroup: string
     costCode: string
     num: number
     uniqueKey: string //num_component
@@ -11,6 +13,7 @@ export interface Element {
     component: string
     unit: ElementUnit
     qtyUnit: string
+    life: number
     oldSurvey?: ElementSurvey
     newSurvey?: ElementSurvey
 }

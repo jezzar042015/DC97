@@ -1,4 +1,3 @@
-import type { Survey } from "./survey"
 
 export interface Facility {
     whq: string
@@ -9,9 +8,6 @@ export interface Facility {
     congregations: number
     auditoriums: number
     buildings: number
-
-    oldSurvey?: Survey
-    newSurvey?: Survey
 }
 
 type MeasurementType = 'Metric' | 'Imperial'

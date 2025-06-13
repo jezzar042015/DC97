@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { read, utils, type WorkSheet } from "xlsx";
+import { read, type WorkSheet } from "xlsx";
 import { useFacilitiesStore } from "@/stores/facilities";
 import { useDateFormat } from "@vueuse/core";
 import { useSurveysStore } from "@/stores/surveys";
@@ -8,7 +8,10 @@ import type { Survey } from "@/types/survey";
 import type { ElementSurvey } from "@/types/elementSurvey";
 import type { Element } from "@/types/element";
 import type { ElementLibrary } from "@/types/elementLibrary";
+import type { Building } from "@/types/building";
 import { useElementsStore } from "@/stores/elements";
+import { useElementSurveys } from "@/stores/element.surveys";
+import { useBuildingsStore } from "@/stores/buildings";
 
 export const useXlsmParser = () => {
 
@@ -16,11 +19,14 @@ export const useXlsmParser = () => {
     const END_ROW = 300
 
     const facilitiesStore = useFacilitiesStore()
-    const surverysStore = useSurveysStore()
+    const surveysStore = useSurveysStore()
+    const buildingsStore = useBuildingsStore()
     const elementsStore = useElementsStore()
+    const elementsSurveys = useElementSurveys()
 
     const elementSurveys: ElementSurvey[] = []
     const facilityElements: Element[] = []
+    const facilityBuildings: Building[] = []
     const elementsLibrary: ElementLibrary[] = []
 
     const facility = ref<Facility>({
@@ -55,10 +61,10 @@ export const useXlsmParser = () => {
 
         await loadFacility(evaluationSheet)
         await loadSurvey(evaluationSheet)
-        // await loadBuildings(evaluationSheet)
+        await loadBuildings(evaluationSheet)
         await loadElementsLibrary(elementsSheet)
         await loadElements(evaluationSheet)
-        // await loadElementsSurvey(evaluationSheet)
+        await loadElementsSurvey(evaluationSheet)
     }
 
     const loadFacility = async (evaluationSheet: WorkSheet) => {
@@ -88,14 +94,42 @@ export const useXlsmParser = () => {
         survey.value.description = evaluationSheet['AF3'].v
         survey.value.uniqueKey = `${survey.value.whq}_${useDateFormat(surveyDate, "YYYYMMDD").value}`
 
-        surverysStore.add(JSON.parse(
+        surveysStore.add(JSON.parse(
             JSON.stringify(survey.value)
         ))
 
     }
 
     const loadBuildings = async (evaluationSheet: WorkSheet) => {
+        const BLDG_START_ROW = 20
+        const BLDG_END_ROW = 20 + ((facility.value.buildings - 1) * 2)
 
+        facilityBuildings.length = 0
+
+        for (let index = BLDG_START_ROW; index <= BLDG_END_ROW; index += 2) {
+            const isVisible = Boolean(evaluationSheet[`H${index}`])
+            if (isVisible) {
+                const building: Building = {
+                    facilityWhq: facility.value.whq,
+                    whq: evaluationSheet[`H${index}`]?.v,
+                    name: evaluationSheet[`L${index}`]?.v,
+                    levels: evaluationSheet[`P${index}`]?.v,
+                    occupancy: evaluationSheet[`R${index}`]?.v,
+                    gfa: evaluationSheet[`V${index}`]?.v,
+                    construction: evaluationSheet[`AA${index}`]?.v,
+                    renMajYear: evaluationSheet[`AD${index}`]?.v,
+                    maintenance: evaluationSheet[`AH${index}`]?.v,
+                    building: evaluationSheet[`AL${index}`]?.v,
+                    projRenYear: evaluationSheet[`AP${index}`]?.v,
+                }
+                facilityBuildings.push(building)
+            }
+        }
+
+        const storable = JSON.parse(JSON.stringify(facilityBuildings));
+        buildingsStore.batchAdd(facility.value.whq,
+            JSON.parse(JSON.stringify(storable))
+        )
     }
 
     const loadElementsLibrary = async (elementsSheet: WorkSheet) => {
@@ -127,24 +161,32 @@ export const useXlsmParser = () => {
     }
 
     const loadElements = async (evaluationSheet: WorkSheet) => {
+        facilityElements.length = 0
+        let categoryGroup = ''
+
         for (let index = START_ROW; index <= END_ROW; index++) {
             if (evaluationSheet[`AA${index}`]) {
 
                 const uniqueKey = `${evaluationSheet["F" + index]?.v}_${evaluationSheet["P" + index]?.v}`
                 const relatedLibItem = elementsLibrary.find(e => e.uniqueKey === uniqueKey)
 
+                categoryGroup = evaluationSheet[`C${index}`]?.v ? evaluationSheet[`C${index}`]?.v : categoryGroup
+
                 if (relatedLibItem) {
                     const element: Element = {
+                        srcRow: index,
                         whq: facility.value.whq,
                         uniqueKey: uniqueKey,
                         category: relatedLibItem.category,
+                        categoryGroup: categoryGroup,
                         component: relatedLibItem.component,
                         componentId: relatedLibItem.componentId,
                         costCode: relatedLibItem.costCode,
                         name: relatedLibItem.name,
                         num: relatedLibItem.num,
                         qtyUnit: evaluationSheet[`AB${index}`]?.v,
-                        unit: relatedLibItem.unit
+                        unit: relatedLibItem.unit,
+                        life: getElementLife(uniqueKey)
                     }
 
                     facilityElements.push(element)
@@ -160,28 +202,49 @@ export const useXlsmParser = () => {
 
     const loadElementsSurvey = async (evaluationSheet: WorkSheet) => {
 
+        elementSurveys.length = 0
+        let categoryGroup = ''
+
         for (let index = START_ROW; index <= END_ROW; index++) {
+            categoryGroup = evaluationSheet[`C${index}`]?.v ? evaluationSheet[`C${index}`]?.v : categoryGroup
+
             if (evaluationSheet[`AA${index}`]) {
                 const itemSurvey: ElementSurvey = {
+                    srcRow: index,
+                    categoryGroup: categoryGroup,
                     condition: evaluationSheet[`AF${index}`]?.v,
-                    remainingYears: evaluationSheet[`AH${index}`]?.v,
+                    remainingYears: evaluationSheet[`AG${index}`]?.v,
                     adjRemainingYears: evaluationSheet[`AI${index}`]?.v,
                     information: evaluationSheet[`AJ${index}`]?.v,
                     qty: evaluationSheet[`AA${index}`]?.v,
                     lastYear: evaluationSheet[`AC${index}`]?.v,
                     surveyKey: survey.value.uniqueKey,
-                    key: `${evaluationSheet["F" + index]?.v}_${evaluationSheet["P" + index]?.v}`
+                    key: `${evaluationSheet["F" + index]?.v}_${evaluationSheet["P" + index]?.v}`,
+                    whq: facility.value.whq
                 }
+
 
                 elementSurveys.push(itemSurvey)
             }
         }
+
+        const storable = JSON.parse(JSON.stringify(elementSurveys))
+        elementsSurveys.batchAdd(survey.value.uniqueKey, storable)
+
     }
 
     const convertExcelDate = (xlsDate: any) => {
         return typeof xlsDate === "number"
             ? new Date(Date.UTC(1899, 11, 30) + xlsDate * 86400000)
             : new Date(xlsDate);
+    }
+
+    const getElementLife = (key: string) => {
+        type climateOptions = 'tropical' | 'dry' | 'temperate' | 'cold' | 'coastal'
+        const elemLibrary = elementsLibrary.find(e => e.uniqueKey === key)
+        if (!elemLibrary) return 0
+        const climate = facility.value.climate.toLocaleLowerCase() as climateOptions
+        return elemLibrary[climate] ?? 0
     }
 
     return {

@@ -24,7 +24,7 @@ const router = createRouter({
       component: FacilityDetailView,
     },
     {
-      path: '/elements/:whq/:key',
+      path: '/elements/:whq/:srcRow',
       name: 'element-detail',
       component: ElementDetailView,
     },

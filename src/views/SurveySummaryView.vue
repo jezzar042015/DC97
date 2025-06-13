@@ -8,13 +8,14 @@
                     <hr class="border-amber-400">
                 </div>
                 <div v-if="facilityStore.facility" class="">
-                    <DetailItemValue label="Location Address" :value="facilityStore.facility.location" />
+                    <DetailItemValue :label="facilityStore.facility.primaryUse"
+                        :value="facilityStore.facility.location" />
                 </div>
                 <div class="flex justify-between">
                     <DetailItemValue label="Evaluation Date" :value="surveyStore.target.date" />
                     <DetailItemValue label="Evaluation Year" :value="surveyStore.target.year" />
                 </div>
-                <DetailItemValue label="Evaluation Description" :value="surveyStore.target.description" />
+                <DetailItemValue label="Evaluation Description" :value="surveyStore.target.description" :bold="false" />
             </div>
 
             <div class="space-y-3 p-5 shadow bg-white">
@@ -23,9 +24,9 @@
                     </h3>
                     <hr class="border-amber-400">
                 </div>
-                <div class="">
-                    <div v-for="elem in surveyStore.elements" :key="elem.uniqueKey"
-                        @click="viewElementDetail(elem.uniqueKey, elem.whq)">
+                <div class="pb-7">
+                    <div v-for="elem in surveyStore.elements" :key="`${elem.whq}_${elem.srcRow}`"
+                        @click="viewElementDetail(elem.whq, elem.srcRow)">
                         <ElementListItem :element="elem" />
                     </div>
 
@@ -33,11 +34,13 @@
             </div>
         </div>
     </main>
+    <NavigationBar />
 </template>
 
 <script setup lang="ts">
     import DetailItemValue from '@/components/DetailItemValue.vue';
     import ElementListItem from '@/components/ElementListItem.vue';
+    import NavigationBar from '@/components/NavigationBar.vue';
     import { useFacilityStore } from '@/stores/facility';
     import { useSurveyStore } from '@/stores/survey';
     import { onMounted } from 'vue';
@@ -51,10 +54,13 @@
         const key = router.currentRoute.value.params.key
         if (!key) return
         await surveyStore.load(key.toString())
+        if (facilityStore.facility) return
+        const whq = key.toString().split('_')[0]
+        facilityStore.load(whq)
     }
 
-    const viewElementDetail = (key: string, whq: string) => {
-        router.push({ name: 'element-detail', params: { key, whq } })
+    const viewElementDetail = (whq: string, srcRow: number) => {
+        router.push({ name: 'element-detail', params: { whq, srcRow } })
     }
 
     onMounted(async () => {

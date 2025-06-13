@@ -10,19 +10,21 @@ export const useElementsStore = defineStore('elements', () => {
         []
     )
 
+    const waitUntilFinished = async () => {
+        if (isFinished.value) return;
+        await new Promise<void>((resolve) => {
+            const stop = watch(isFinished, (val) => {
+                if (val) {
+                    stop();
+                    resolve();
+                }
+            });
+        });
+    };
+
     const batchAdd = async (whq: string, facilityElements: Element[]) => {
         await batchRemove(whq)
-        if (!isFinished.value) {
-            await new Promise(resolve => {
-                const stop = watch(isFinished, (val) => {
-                    if (val) {
-                        stop();
-                        resolve(null);
-                    }
-                });
-            });
-        }
-        // Ensure only plain objects are stored (remove reactivity)
+
         elements.value = [
             ...elements.value.map(e => JSON.parse(JSON.stringify(e))),
             ...facilityElements.map(e => JSON.parse(JSON.stringify(e)))
@@ -30,8 +32,10 @@ export const useElementsStore = defineStore('elements', () => {
     }
 
     const batchRemove = async (whq: string) => {
-        elements.value = elements.value.filter(f => f.whq !== whq);
-        // cascade delete surveys, buildings, and elements
+        const filtered = elements.value.filter(f => f.whq !== whq);
+        elements.value = JSON.parse(JSON.stringify(filtered));
+        await waitUntilFinished();
+
     }
 
 

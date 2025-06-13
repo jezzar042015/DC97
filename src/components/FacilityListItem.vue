@@ -4,9 +4,9 @@
             <span class="text-sm uppercase">{{ facility.primaryUse }}</span>
             <span class="text-xs">{{ facility.whq }}</span>
         </div>
-        <div class="font-bold text-lg text-amber-600">{{ facility.location }}</div>
+        <div class="text-lg text-amber-600 leading-6">{{ facility.location }}</div>
         <div class="space-x-2">
-            <span class="text-sm">Previous Evaluation:</span>
+            <span class="text-sm">FEV:</span>
             <span>{{ previousFEV }}</span>
         </div>
     </div>
@@ -26,6 +26,6 @@
     const previousFEV = computed(() => {
         const { previous } = surveysStore.getByFacility(facility.whq)
         if (!previous) return ''
-        return useDateFormat(previous.date, "MMMM DD, YYYY")
+        return useDateFormat(previous.date, "MMM DD, YYYY")
     })
 </script>
