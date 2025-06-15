@@ -1,0 +1,7 @@
+{
+  "name": "dc97",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
