@@ -1,4 +1,4 @@
-import type { ConditionNumber, Element } from "./element"
+import type { ConditionNumber } from "./element"
 
 export interface ElementSurvey {
     srcRow: number
@@ -6,7 +6,6 @@ export interface ElementSurvey {
     categoryGroup: string
     surveyKey: string
     key: string
-    element?: Element
     qty: number | null
     lastYear: number | null
     condition: ConditionNumber | null
