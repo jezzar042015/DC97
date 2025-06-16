@@ -16,8 +16,10 @@
                     <DetailItemValue label="Unit" :value="elementStore.element.unit" />
                 </div>
 
-                <DetailItemValue :label="elementStore.element.name" :value="elementStore.element.component"
-                    :size="'2xl'" />
+                <div class="space-x-3 items-center">
+                    <div class="text-orange-400">{{ elementStore.element.name }}</div>
+                    <div class="font-bold text-xl text-orange-400">{{ elementStore.element.component }}</div>
+                </div>
             </div>
 
             <ElementPreviousSurvey :element="elementStore.element" />

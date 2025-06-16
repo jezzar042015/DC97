@@ -5,7 +5,7 @@
             <hr class="border-amber-400">
         </div>
         <div v-if="survey" class="space-y-2">
-            <div class="flex justify-between space-x-4">
+            <div class="flex justify-between space-x-4 bg-blue-50 rounded shadow py-2 px-4">
                 <DetailItemValue label="Condition" :value="survey.condition" :size="'2xl'" />
                 <DetailItemValue v-if="conditionDetails" :label="conditionDetails?.label" :value="conditionDetails.desc"
                     :bold="false" :size="'sm'" />
