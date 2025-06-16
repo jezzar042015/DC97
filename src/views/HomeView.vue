@@ -1,6 +1,6 @@
 <template>
   <main class="h-screen bg-gray-50">
-    <div class="p-6 h-full">
+    <div class="px-4 pb-4 pt-12 h-full">
       <!-- <div class="font-bold"></div> -->
 
       <div class="space-y-2 flex flex-col justify-between h-full flex-1">

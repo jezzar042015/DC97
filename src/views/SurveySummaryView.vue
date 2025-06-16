@@ -1,6 +1,6 @@
 <template>
     <main class="h-screen bg-gray-50">
-        <div class="p-4 space-y-3">
+        <div class="px-4 pb-4 pt-12 space-y-3">
 
             <div v-if="surveyStore.target" class="space-y-3 p-5 shadow bg-white">
                 <div>
@@ -18,11 +18,12 @@
                 <DetailItemValue label="Evaluation Description" :value="surveyStore.target.description" :bold="false" />
             </div>
 
-            <div class="space-y-3 p-5 shadow bg-white">
+            <div class="space-y-3 py-5 pr-5 pl-2 shadow bg-white">
                 <div>
-                    <h3 class="font-bold text-xl uppercase pb-2">Elements &bullet; {{ surveyStore.elements.length }}
+                    <h3 class="font-bold text-xl pl-3 uppercase pb-2">Elements &bullet; {{ surveyStore.elements.length
+                        }}
                     </h3>
-                    <hr class="border-amber-400">
+                    <hr class="border-amber-400 ml-3">
                 </div>
                 <div class="pb-7">
                     <div v-for="elem in surveyStore.elements" :key="`${elem.whq}_${elem.srcRow}`"

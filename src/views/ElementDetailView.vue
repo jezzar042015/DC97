@@ -1,6 +1,6 @@
 <template>
     <main class="h-screen bg-gray-50">
-        <div class="p-4 space-y-3" v-if="elementStore.element">
+        <div class="px-4 pb-4 pt-12 space-y-3" v-if="elementStore.element">
             <div class="space-y-3 p-6 shadow bg-white">
                 <div v-if="facilityStore.facility" class="">
                     <DetailItemValue :label="`${facilityStore.facility.primaryUse}  (${facilityStore.facility.whq})`"

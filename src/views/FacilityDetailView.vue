@@ -1,6 +1,6 @@
 <template>
     <main class="h-screen bg-gray-50">
-        <div class="p-4 space-y-3">
+        <div class="px-4 pb-4 pt-12 space-y-3">
             <div v-if="facilityStore.facility" class="space-y-3 p-5 shadow bg-white">
                 <div>
                     <h3 class="font-bold text-xl uppercase pb-2">Facility Details</h3>
