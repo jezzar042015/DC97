@@ -1,6 +1,6 @@
 <template>
     <ModalWrapper>
-        <div class="bg-white p-4 w-full rounded">
+        <div class="bg-white p-4 w-full rounded mt-5">
             <div>
                 <div class="text-lg mb-2">
                     Element Evaluation

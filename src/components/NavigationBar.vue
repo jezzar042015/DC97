@@ -1,6 +1,6 @@
 <template>
     <div class="fixed bottom-0 left-0 w-full px-4 py-4 bg-gray-200 shadow-2xl">
-        <div class="flex justify-center space-x-8">
+        <div class="flex justify-between space-x-8 px-10">
             <div class="flex flex-col space-y-1 items-center" @click="gotoFacilities">
                 <span class="text-xs"> Facilities</span>
                 <HomeIcon class="h-5" />

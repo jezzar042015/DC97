@@ -12,6 +12,10 @@
                 <FacilityListItem :facility="facility" />
               </li>
             </ul>
+            <div v-if="facilitiesStore.facilities.length === 0" class="mt-15 px-2 space-y-3 text-lg text-gray-500">
+              <div>No Facilities Added Yet!</div>
+              <div>Start by importing DC-97</div> 
+            </div>
           </div>
         </div>
 
