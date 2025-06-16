@@ -5,12 +5,18 @@
             <hr class="border-amber-400">
         </div>
         <div v-if="survey" class="space-y-2">
-            <div class="flex justify-between space-x-4 bg-blue-50 rounded shadow py-2 px-4">
+            <div :class="['flex justify-between space-x-4 rounded shadow py-2 px-4',
+                { 'bg-blue-50': survey.condition == 1 },
+                { 'bg-yellow-100': survey.condition == 2 },
+                { 'bg-orange-200': survey.condition == 3 },
+                { 'bg-red-200': survey.condition == 4 }
+            ]">
                 <DetailItemValue label="Condition" :value="survey.condition" :size="'2xl'" />
                 <DetailItemValue v-if="conditionDetails" :label="conditionDetails?.label" :value="conditionDetails.desc"
-                    :bold="false" :size="'sm'" />
+                    :bold="false" :size="'xs'" />
             </div>
-            <DetailItemValue v-if="survey.information" label="Additional Information" :value="survey.information" />
+            <DetailItemValue v-if="survey.information" label="Additional Information" :value="survey.information"
+                :bold="false" />
             <DetailItemValue label="Year Last Replaced or Added" :value="survey.lastYear" />
             <div class="flex justify-between">
                 <DetailItemValue label="Remaining Years" :value="survey.remainingYears" />
@@ -27,6 +33,7 @@
     import { useSurveysStore } from '@/stores/surveys';
     import type { Element } from '@/types/element';
     import DetailItemValue from './DetailItemValue.vue';
+    import { elementConditionDescriptions } from '@/assets/lib/desc';
 
     const { element } = defineProps<{
         element: Element
@@ -53,28 +60,6 @@
     })
 
     const conditionDetails = computed(() => {
-        const library: Record<1 | 2 | 3 | 4, {
-            label: string
-            desc: string
-        }> = {
-            1: {
-                label: "Good",
-                desc: "Element is in 'as new' condition or without noticeable defect"
-            },
-            2: {
-                label: "Acceptable",
-                desc: "Still in reasonable overall serviceable condition; could have had previous repairs. "
-            },
-            3: {
-                label: "Deffective",
-                desc: "Element needs some major repairs in the very near future"
-            },
-            4: {
-                label: "Seriously Deffective",
-                desc: "Element is is deteriorating or malfunctioning beyond repair and needs replacement."
-            },
-        }
-
-        return survey.value ? library[survey.value.condition as 1 | 2 | 3 | 4] : null
+        return survey.value ? elementConditionDescriptions[survey.value.condition as 1 | 2 | 3 | 4] : null
     })
 </script>

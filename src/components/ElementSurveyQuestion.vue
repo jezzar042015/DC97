@@ -1,9 +1,8 @@
 <template>
     <div class="pb-3">
-        <hr class="border-gray-200 my-2">
+        <hr class="border-dotted border-gray-300 my-2">
         <div v-html="question"></div>
-
-        <div class="space-x-2 my-2" v-if="options == 'yes-no'">
+        <div class="space-x-2 mt-4" v-if="options == 'yes-no'">
             <button @click="confirmedSuggestedValue"
                 class="text-base py-2 px-4 shadow bg-blue-500 text-white rounded">Yes!</button>
             <button class="text-base py-2 px-4 shadow bg-white text-blue-500 rounded">No! It needs to be

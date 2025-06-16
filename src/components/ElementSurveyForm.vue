@@ -8,7 +8,10 @@
                 <hr class="border-amber-400 my-2">
                 <div class="space-y-2 py-2">
                     <DetailItemValue label="" :value="form.categoryGroup" :bold="false" :size="'sm'" />
-                    <DetailItemValue :label="element.name" :value="element.component" />
+                    <div class="flex space-x-2 items-start" >
+                        <!-- <LayersMinimilasticIcon class="h-5 mt-1" /> -->
+                        <DetailItemValue :label="element.name" :value="element.component" />
+                    </div>
                 </div>
 
                 <ElementSurveyQuestion v-if="(form.qty ?? -1) < 0" :property="'qty'" :suggested-value="survey?.qty ?? 0"
@@ -58,6 +61,7 @@
     import ModalWrapper from './ModalWrapper.vue';
     import DetailItemValue from './DetailItemValue.vue';
     import ElementSurveyQuestion from './ElementSurveyQuestion.vue';
+import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue';
 
     const emits = defineEmits(['unload-survey-form'])
     const close = () => emits('unload-survey-form')
