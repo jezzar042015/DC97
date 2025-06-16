@@ -1,6 +1,6 @@
 <template>
-    <div class="space-y-3 p-6 shadow bg-white">
-        <div>
+    <div class="space-y-3 py-6 px-3 shadow bg-white">
+        <div class="px-3">
             <h3 class="font-bold text-xl uppercase pb-2">{{ previousSurvey?.year }} Evaluation</h3>
             <hr class="border-amber-400">
         </div>
@@ -15,14 +15,16 @@
                 <DetailItemValue v-if="conditionDetails" :label="conditionDetails?.label" :value="conditionDetails.desc"
                     :bold="false" :size="'xs'" />
             </div>
-            <DetailItemValue v-if="survey.information" label="Additional Information" :value="survey.information"
-                :bold="false" />
-            <DetailItemValue label="Year Last Replaced or Added" :value="survey.lastYear" />
-            <div class="flex justify-between">
-                <DetailItemValue label="Remaining Years" :value="survey.remainingYears" />
-                <DetailItemValue label="Adjusted Rem. Years" :value="survey.adjRemainingYears" />
+            <div class="px-3 space-y-1">
+                <DetailItemValue v-if="survey.information" label="Additional Information" :value="survey.information"
+                    :bold="false" />
+                <DetailItemValue label="Year Last Replaced or Added" :value="survey.lastYear" />
+                <div class="flex justify-between">
+                    <DetailItemValue label="Remaining Years" :value="survey.remainingYears" />
+                    <DetailItemValue label="Adjusted Rem. Years" :value="survey.adjRemainingYears" />
+                </div>
+                <DetailItemValue label="Quantity" :value="`${survey.qty} ${element.qtyUnit}`" />
             </div>
-            <DetailItemValue label="Quantity" :value="`${survey.qty} ${element.qtyUnit}`" />
         </div>
     </div>
 </template>
@@ -33,7 +35,7 @@
     import { useSurveysStore } from '@/stores/surveys';
     import type { Element } from '@/types/element';
     import DetailItemValue from './DetailItemValue.vue';
-    import { elementConditionDescriptions } from '@/assets/lib/desc';
+    import { elementConditionDescriptions } from '@/data/lib/desc';
 
     const { element } = defineProps<{
         element: Element
