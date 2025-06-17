@@ -14,7 +14,7 @@
             ]" style="width: 1.5rem; height: 1.5rem;">
                 {{ condition }}
             </div>
-            <div class="font-medium">{{ element.name }}</div>
+            <div class="font-medium pr-1">{{ element.name }}</div>
             <div class="text-sm">{{ element.component }}</div>
         </div>
     </div>
@@ -65,6 +65,9 @@
 
 
     const condition = computed(() => {
+        if (hasCurrentElementSurvey.value) {
+            return currentElemSurvey.value?.condition ?? 0
+        }
         return prevElemSurvey.value?.condition ?? 0
     })
 </script>

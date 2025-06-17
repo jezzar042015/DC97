@@ -22,8 +22,8 @@
                 </div>
             </div>
 
-            <ElementPreviousSurvey :element="elementStore.element" />
             <ElementCurrentSurvey :element="elementStore.element" @load-survey-form="loadSurveyForm" />
+            <ElementSurveyCard :scope="'previous'" :element="elementStore.element" />
         </div>
     </main>
     <SurveyForm v-if="surveyForm === 'facility-survey'" @unload-survey-form="unloadSurveyForm" />
@@ -37,7 +37,7 @@
     import { onMounted, ref } from 'vue';
     import { useRouter } from 'vue-router';
     import DetailItemValue from '@/components/DetailItemValue.vue';
-    import ElementPreviousSurvey from '@/components/ElementPreviousSurvey.vue';
+    import ElementSurveyCard from '@/components/ElementSurveyCard.vue';
     import ElementCurrentSurvey from '@/components/ElementCurrentSurvey.vue';
     import SurveyForm from '@/components/SurveyForm.vue';
     import ElementSurveyForm from '@/components/ElementSurveyForm.vue';

@@ -16,6 +16,13 @@
             </div>
 
             <div class="flex-1 overflow-auto px-4 bg-gray-50">
+                <div>
+                    <hr class="border-dotted border-gray-300 my-2">
+                    <span class="text-gray-500">Element Information</span>
+                    <textarea class="text-blue-500 font-medium w-full border border-gray-200 outline-0 p-2" type="text"
+                        v-model="form.information"></textarea>
+                </div>
+
                 <ElementSurveyQuestion v-if="(form.qty ?? -1) < 0" :property="'qty'" :suggested-value="survey?.qty ?? 0"
                     :question="`Is the quantity of the element <strong>${survey?.qty} ${element.qtyUnit}</strong>?`"
                     @update="updateForm" />
@@ -47,12 +54,7 @@
                 <ElementSurveyQuestion :property="'condition'" :suggested-value="form.condition ?? 1"
                     :question="`What is the condition of the element?`" :options="'condition'" @update="updateForm" />
 
-                <div>
-                    <hr class="border-dotted border-gray-300 my-2">
-                    <span class="text-gray-500">Additional Information</span>
-                    <textarea class="text-blue-500 font-medium w-full border-b border-b-gray-400 outline-0 py-2"
-                        type="text" v-model="form.information"></textarea>
-                </div>
+
 
                 <div class="flex space-x-3 my-10">
                     <button v-if="completed" @click="confirm" class="py-2 px-4 shadow text-white bg-blue-500 rounded">

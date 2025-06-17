@@ -1,12 +1,7 @@
 <template>
-    <div class="space-y-3 p-6 shadow bg-white" v-if="survey">
-        <div>
-            <h3 class="font-bold text-xl uppercase pb-2">Current Evaluation</h3>
-            <hr class="border-amber-400">
-        </div>
-    </div>
+    <ElementSurveyCard v-if="survey" :element="element" :scope="'current'" />
 
-    <div v-else class="mt-10">
+    <div v-else class="mt-5">
         <button v-if="!currentSurvey" class="shadow py-3 w-full bg-blue-700 text-white"
             @click="loadSurveyForm('facility-survey')">
             Start Current Facility Evaluation
@@ -20,8 +15,9 @@
 <script setup lang="ts">
     import { computed } from 'vue';
     import { useSurveysStore } from '@/stores/surveys';
-    import type { Element } from '@/types/element';
     import { useElementSurveys } from '@/stores/element.surveys';
+    import type { Element } from '@/types/element';
+    import ElementSurveyCard from './ElementSurveyCard.vue';
 
     const { element } = defineProps<{
         element: Element
