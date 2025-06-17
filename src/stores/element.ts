@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import { useElementsStore } from "./elements";
 import { computed, ref } from "vue";
+import { useElementSurveys } from "./element.surveys";
 
 export const useElementStore = defineStore('element', () => {
     const elements = useElementsStore()
+    const elementSurveys = useElementSurveys()
     const currentSrcRow = ref<number>(0)
     const currentWhq = ref<string>("")
 
@@ -19,8 +21,33 @@ export const useElementStore = defineStore('element', () => {
         );
     })
 
+    const surveys = computed(() => {
+        if (!element.value) return []
+        const srcRow = Number(element.value.srcRow)
+        return elementSurveys.elementSurveys
+            .filter(
+                e => e.srcRow == srcRow &&
+                    e.whq === element.value?.whq)
+            .sort(
+                (a, b) => a.surveyKey.localeCompare(b.surveyKey)
+            )
+    })
+
+    const previousSurvey = computed(() => {
+        if (surveys.value.length == 0) return null
+        return surveys.value[0]
+    })
+
+    const currentSurvey = computed(() => {
+        if (surveys.value.length > 1) return null
+        return surveys.value[1]
+    })
+
     return {
         element,
-        load
+        load,
+        surveys,
+        previousSurvey,
+        currentSurvey
     }
 })

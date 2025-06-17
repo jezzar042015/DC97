@@ -1,31 +1,32 @@
 <template>
     <div class="fixed bottom-0 left-0 w-full px-4 py-3 bg-gray-200 shadow-2xl">
         <div class="flex justify-between space-x-8 px-10">
-            <div class="flex flex-col space-y-1 items-center" @click="gotoFacilities">
-                <span class="text-xs"> Facilities</span>
-                <HomeIcon class="h-5" />
-            </div>
-            <div class="flex flex-col space-y-1 items-center">
-                <span class="text-xs"> Evaluations</span>
-                <CheckSquareIcon class="h-5" />
-            </div>
-            <div class="flex flex-col space-y-1 items-center">
-                <span class="text-xs"> Elements</span>
-                <LayersMinimilasticIcon class="h-5" />
+            <div v-for="item in navItems" :key="item.name" class="flex flex-col space-y-1 items-center cursor-pointer"
+                @click="() => router.push({ name: item.name })">
+                <span :class="['text-xs', currentView === item.name ? 'text-blue-500' : 'text-black']">
+                    {{ item.label }}
+                </span>
+                <component :is="item.icon" class="h-5" :stroke="currentView === item.name ? 'blue-500' : 'default'" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { useRouter } from 'vue-router';
-    import HomeIcon from './icons/HomeIcon.vue';
-    import CheckSquareIcon from './icons/CheckSquareIcon.vue';
-    import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue';
+    import { computed } from 'vue'
+    import { useRouter } from 'vue-router'
+
+    import HomeIcon from './icons/HomeIcon.vue'
+    import CheckSquareIcon from './icons/CheckSquareIcon.vue'
+    import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue'
 
     const router = useRouter()
 
-    const gotoFacilities = () => {
-        router.push({ name: 'home' })
-    }
+    const currentView = computed(() => router.currentRoute.value.name)
+
+    const navItems = [
+        { name: 'home', label: 'Facilities', icon: HomeIcon },
+        { name: 'surveys', label: 'Evaluations', icon: CheckSquareIcon },
+        { name: 'elements', label: 'Elements', icon: LayersMinimilasticIcon },
+    ]
 </script>

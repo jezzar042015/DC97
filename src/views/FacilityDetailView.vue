@@ -19,16 +19,17 @@
                     <DetailItemValue label="Units of Measurement" :value="facilityStore.facility.measurements" />
                 </div>
             </div>
-            <div class="p-5 shadow bg-white">
-                <h3 class="font-bold text-xl uppercase pb-2">Evaluation Visit</h3>
-                <hr class="border-amber-400">
-                <div class="py-4" v-if="previousFev">
+            <div class="py-5 shadow bg-white">
+                <h3 class="font-bold text-xl uppercase pb-2 px-5">Evaluation Visit</h3>
+                <hr class="border-amber-400 mx-5">
+                <div class="py-4 px-2" v-if="previousFev">
                     <div class="flex justify-between py-3 px-4 rounded shadow"
                         @click="viewSurveyItems(previousFev?.uniqueKey)">
                         <div class="text-2xl font-bold text-gray-700">{{ previousFevYear }} FEV</div>
                         <RightArrowIcon class="h-10" />
                     </div>
                 </div>
+
             </div>
             <div class="p-3 shadow bg-white">
                 <button class="p-4 text-center w-full bg-red-400 rounded text-white" @click="loadDeleteConfirmation">

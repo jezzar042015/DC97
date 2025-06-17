@@ -2,21 +2,9 @@
     <main class="h-screen bg-gray-50">
         <div class="px-4 pb-4 pt-12 space-y-3">
 
-            <div v-if="surveyStore.target" class="space-y-3 p-5 shadow bg-white">
-                <div>
-                    <h3 class="font-bold text-xl uppercase pb-2">Evaluation Details</h3>
-                    <hr class="border-amber-400">
-                </div>
-                <div v-if="facilityStore.facility" class="">
-                    <DetailItemValue :label="facilityStore.facility.primaryUse"
-                        :value="facilityStore.facility.location" />
-                </div>
-                <div class="flex justify-between">
-                    <DetailItemValue label="Evaluation Date" :value="surveyStore.target.date" />
-                    <DetailItemValue label="Evaluation Year" :value="surveyStore.target.year" />
-                </div>
-                <DetailItemValue label="Evaluation Description" :value="surveyStore.target.description" :bold="false" />
-            </div>
+            <template v-if="surveyStore.target && facilityStore.facility">
+                <FacilitySurveyCard :survey="surveyStore.target" />
+            </template>
 
             <div class="space-y-3 py-5 pr-5 pl-2 shadow bg-white">
                 <div>
@@ -39,13 +27,13 @@
 </template>
 
 <script setup lang="ts">
-    import DetailItemValue from '@/components/DetailItemValue.vue';
-    import ElementListItem from '@/components/ElementListItem.vue';
-    import NavigationBar from '@/components/NavigationBar.vue';
-    import { useFacilityStore } from '@/stores/facility';
-    import { useSurveyStore } from '@/stores/survey';
     import { onMounted } from 'vue';
+    import { useFacilityStore } from '@/stores/facility';
     import { useRouter } from 'vue-router';
+    import { useSurveyStore } from '@/stores/survey';
+    import ElementListItem from '@/components/ElementListItem.vue';
+    import FacilitySurveyCard from '@/components/FacilitySurveyCard.vue';
+    import NavigationBar from '@/components/NavigationBar.vue';
 
     const facilityStore = useFacilityStore()
     const surveyStore = useSurveyStore()

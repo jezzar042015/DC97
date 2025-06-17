@@ -2,11 +2,13 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useSurveysStore } from "./surveys";
 import { useElementsStore } from "./elements";
+import { useFacilitiesStore } from "./facilities";
 
 export const useSurveyStore = defineStore('survey', () => {
 
     const surveys = useSurveysStore();
     const elementsStore = useElementsStore()
+    const facilities = useFacilitiesStore()
     const targetKey = ref<string>('')
 
     const target = computed(() => {
@@ -17,6 +19,10 @@ export const useSurveyStore = defineStore('survey', () => {
         targetKey.value = key;
     }
 
+    const facility = computed(() => {
+        return facilities.facilities.find(f => f.whq == target.value?.whq)
+    })
+
     const elements = computed(() => {
         if (!target.value) return []
         return elementsStore.elements.filter(e => e.whq.startsWith(target.value?.whq ?? ''))
@@ -25,6 +31,7 @@ export const useSurveyStore = defineStore('survey', () => {
     return {
         target,
         elements,
+        facility,
         load
     }
 })

@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ImportView from '@/views/ImportView.vue'
+import EvaluationsView from '@/views/SurveysListView.vue'
 import FacilityDetailView from '@/views/FacilityDetailView.vue'
 import ElementDetailView from '@/views/ElementDetailView.vue'
 import SurveySummaryView from '@/views/SurveySummaryView.vue'
+import SurveyElementsView from '@/views/SurveyElementsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,9 +15,9 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/import',
-      name: 'import',
-      component: ImportView,
+      path: '/facility-surveys',
+      name: 'surveys',
+      component: EvaluationsView,
     },
     {
       path: '/facilities/:whq',
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/surveys/:key',
       name: 'survey-detail',
       component: SurveySummaryView,
+    },
+    {
+      path: '/facility-elements',
+      name: 'elements',
+      component: SurveyElementsView,
     },
   ],
 })

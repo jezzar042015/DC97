@@ -56,7 +56,7 @@
 
     const currentElemSurvey = computed(() => {
         if (!currentSurvey.value) return null
-        return elementSurveys.elementSurveys.find(e => e.key === (element.uniqueKey) && e.surveyKey === currentSurvey.value?.uniqueKey)
+        return elementSurveys.elementSurveys.find(e => (e.srcRow === element.srcRow) && (e.surveyKey === currentSurvey.value?.uniqueKey))
     })
 
     const hasCurrentElementSurvey = computed(() => {

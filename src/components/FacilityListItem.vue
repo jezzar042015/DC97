@@ -5,27 +5,14 @@
             <span class="text-xs">{{ facility.whq }}</span>
         </div>
         <div class="text-lg text-amber-600 leading-6">{{ facility.location }}</div>
-        <div class="space-x-2">
-            <span class="text-sm">FEV:</span>
-            <span>{{ previousFEV }}</span>
-        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { computed } from 'vue';
     import type { Facility } from '@/types/facility';
-    import { useSurveysStore } from '@/stores/surveys';
-    import { useDateFormat } from '@vueuse/core';
 
-    const surveysStore = useSurveysStore()
     const { facility } = defineProps<{
         facility: Facility
     }>()
 
-    const previousFEV = computed(() => {
-        const { previous } = surveysStore.getByFacility(facility.whq)
-        if (!previous) return ''
-        return useDateFormat(previous.date, "MMM DD, YYYY")
-    })
 </script>

@@ -1,8 +1,9 @@
 <template>
     <div class="space-y-3 py-6 px-3 shadow bg-white">
-        <div class="px-3">
+        <div class="px-3 relative">
             <h3 class="font-bold text-xl uppercase pb-2">{{ surveyYear }} Evaluation</h3>
             <hr class="border-amber-400">
+            <UpdateIcon v-if="scope == 'current'" class="h-5 absolute right-2 top-1" />
         </div>
         <div v-if="survey" class="space-y-2">
             <div :class="['flex justify-between space-x-4 rounded shadow py-2 px-4',
@@ -36,6 +37,7 @@
     import { elementConditionDescriptions } from '@/data/lib/desc';
     import type { Element } from '@/types/element';
     import DetailItemValue from './DetailItemValue.vue';
+    import UpdateIcon from './icons/UpdateIcon.vue';
 
     const { element, scope = 'previous' } = defineProps<{
         element: Element,
