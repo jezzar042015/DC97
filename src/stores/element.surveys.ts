@@ -34,6 +34,7 @@ export const useElementSurveys = defineStore('element-surveys', () => {
 
     const add = async (elementSurve: ElementSurvey) => {
         elementSurveys.value.push(elementSurve);
+        await waitUntilFinished()
     }
 
     const batchRemoveByWHQ = async (whq: string) => {

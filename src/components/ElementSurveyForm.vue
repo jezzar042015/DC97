@@ -142,7 +142,7 @@
 
     const confirm = async () => {
         const storable = JSON.parse(JSON.stringify(form.value))
-        elementSurveys.add(storable);
+        await elementSurveys.add(storable);
         emits('unload-survey-form', '')
     }
 
