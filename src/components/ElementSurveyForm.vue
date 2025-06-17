@@ -1,24 +1,28 @@
 <template>
-    <ModalWrapper>
-        <div class="bg-white p-4 w-full rounded mt-5">
-            <div>
+    <ModalWrapper :px="0" :py="0">
+        <div class="bg-white w-full h-screen rounded flex flex-col">
+            <div class="mt-8 px-4 py-2 shadow bg-white">
                 <div class="text-lg mb-2">
                     Element Evaluation
                 </div>
                 <hr class="border-amber-400 my-2">
-                <div class="space-y-2 py-2">
+                <div class="space-y-2 py-1">
                     <DetailItemValue label="" :value="form.categoryGroup" :bold="false" :size="'sm'" />
-                    <div class="flex space-x-2 items-start" >
+                    <div class="flex space-x-2 items-start">
                         <!-- <LayersMinimilasticIcon class="h-5 mt-1" /> -->
                         <DetailItemValue :label="element.name" :value="element.component" />
                     </div>
                 </div>
+            </div>
 
+            <div class="flex-1 overflow-auto px-4 bg-gray-50">
                 <ElementSurveyQuestion v-if="(form.qty ?? -1) < 0" :property="'qty'" :suggested-value="survey?.qty ?? 0"
                     :question="`Is the quantity of the element <strong>${survey?.qty} ${element.qtyUnit}</strong>?`"
                     @update="updateForm" />
-                <div v-else class="py-3">
+
+                <div v-else class="py-3 relative">
                     <DetailItemValue label="Quantity" :value="`${form.qty} ${element.qtyUnit}`" />
+                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
                 </div>
 
                 <ElementSurveyQuestion v-if="((form.lastYear ?? 0) === 0)" :property="'lastYear'"
@@ -26,28 +30,40 @@
                     :question="`Was the element last added or replaced in <strong>${survey?.lastYear}</strong>?`"
                     @update="updateForm" />
 
-                <div v-else class="py-3">
+                <div v-else class="py-3 relative">
                     <DetailItemValue label="Latest Year Added or Replaced" :value="form.lastYear" />
+                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
                 </div>
 
                 <ElementSurveyQuestion v-if="((form.adjRemainingYears ?? 0) <= 0)" :property="'adjRemainingYears'"
                     :suggested-value="survey?.remainingYears ?? 0"
                     :question="`Do you agree that the element's remaining life is <strong>${survey?.remainingYears}</strong> years?`"
                     @update="updateForm" />
-                <div v-else class="py-3">
+                <div v-else class="py-3 relative">
                     <DetailItemValue label="Adjusted Remaining Years" :value="form.adjRemainingYears" />
+                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
                 </div>
 
                 <ElementSurveyQuestion :property="'condition'" :suggested-value="form.condition ?? 1"
                     :question="`What is the condition of the element?`" :options="'condition'" @update="updateForm" />
 
+                <div>
+                    <hr class="border-dotted border-gray-300 my-2">
+                    <span class="text-gray-500">Additional Information</span>
+                    <textarea class="text-blue-500 font-medium w-full border-b border-b-gray-400 outline-0 py-2"
+                        type="text" v-model="form.information"></textarea>
+                </div>
+
+                <div class="flex space-x-3 my-10">
+                    <button v-if="completed" @click="confirm" class="py-2 px-4 shadow text-white bg-blue-500 rounded">
+                        Confirm Evaluation
+                    </button>
+                    <button @click="close" class="py-2 px-4 shadow rounded">Cancel</button>
+                </div>
             </div>
-            <div class="flex space-x-3 mt-10">
-                <button v-if="completed" @click="confirm" class="py-2 px-4 shadow text-white bg-blue-500 rounded">
-                    Confirm Evaluation
-                </button>
-                <button @click="close" class="py-2 px-4 shadow rounded">Cancel</button>
-            </div>
+
+
+
         </div>
     </ModalWrapper>
 </template>
@@ -61,7 +77,7 @@
     import ModalWrapper from './ModalWrapper.vue';
     import DetailItemValue from './DetailItemValue.vue';
     import ElementSurveyQuestion from './ElementSurveyQuestion.vue';
-import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue';
+    import UpdateIcon from './icons/UpdateIcon.vue';
 
     const emits = defineEmits(['unload-survey-form'])
     const close = () => emits('unload-survey-form')
@@ -126,6 +142,7 @@ import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue';
 
     const confirm = async () => {
         const storable = JSON.parse(JSON.stringify(form.value))
+        elementSurveys.add(storable);
         emits('unload-survey-form', '')
     }
 
@@ -138,6 +155,7 @@ import LayersMinimilasticIcon from './icons/LayersMinimilasticIcon.vue';
             form.value.whq = n.whq
             form.value.key = n.key
             form.value.condition = n.condition
+            form.value.information = n.information
         },
         {
             immediate: true

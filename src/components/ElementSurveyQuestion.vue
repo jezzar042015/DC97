@@ -1,5 +1,5 @@
 <template>
-    <div class="pb-3">
+    <div class="pb-3" ref="target">
         <hr class="border-dotted border-gray-300 my-2">
         <div v-html="question"></div>
         <div class="mt-4" v-if="options == 'yes-no'">
@@ -11,10 +11,11 @@
                     changed!</button>
             </div>
             <div v-else class="space-x-3 flex">
-                <input type="text" class="border-b border-b-gray-300 py-2 px-1 outline-0 w-[45%]" v-model="override">
+                <input :type="inputType" class="override-input border-b border-b-gray-300 py-2 px-1 outline-0 w-[45%]"
+                    v-model="override">
                 <div class="space-x-1">
                     <button @click="updateNewValue"
-                        class="text-sm py-2 px-3 shadow-md rounded bg-blue-500 text-white">Confirm</button>
+                        :class="['text-sm py-2 px-3 shadow-md rounded text-white', validOverride ? 'bg-blue-500' : 'bg-blue-500/50']">Confirm</button>
                     <button @click="unloadOverride" class="text-sm py-2 px-3 shadow-md rounded">Cancel</button>
                 </div>
             </div>
@@ -47,11 +48,13 @@
 
 <script setup lang="ts">
     import { elementConditionDescriptions } from '@/data/lib/desc';
+    import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
+    import { onClickOutside } from '@vueuse/core'
     import type { ConditionNumber } from '@/types/element';
-    import { nextTick, ref } from 'vue';
 
     const overriding = ref(false);
     const override = ref<string | null>(null)
+
     const defination = ref<{
         label: string
         desc: string
@@ -78,12 +81,18 @@
         emits('update', property, suggestedValue)
     }
 
+    // handling overrides
+    const inputType = computed(() => {
+        const numberProps = ['qty', 'lastYear', 'adjRemainingYears', 'condition']
+        if (numberProps.includes(property)) return 'number'
+        return 'text'
+    })
+
     const loadOverride = () => {
         overriding.value = true
         override.value = ''
         nextTick(() => {
-            // Focus only this component's input
-            const input = document.querySelector('input[type="text"]') as HTMLInputElement
+            const input = document.querySelector('.override-input') as HTMLInputElement
             input?.focus();
         })
     }
@@ -92,7 +101,18 @@
         overriding.value = false
     }
 
+    const validOverride = computed(() => {
+        return Boolean(override.value)
+    })
+
+    const target = useTemplateRef<HTMLElement>('target')
+
+    onClickOutside(target, event => {
+        unloadOverride()
+    })
+
     const updateNewValue = () => {
+        if (!override.value) return
         emits('update', property, override.value)
     }
 
@@ -104,4 +124,11 @@
             defination.value.label = res.label
         }
     }
+
+    onMounted(() => {
+        if (property == 'condition') {
+            updateConditionDefination(suggestedValue as ConditionNumber)
+        }
+    })
+
 </script>

@@ -32,6 +32,10 @@ export const useElementSurveys = defineStore('element-surveys', () => {
         ]
     }
 
+    const add = async (elementSurve: ElementSurvey) => {
+        elementSurveys.value.push(elementSurve);
+    }
+
     const batchRemoveByWHQ = async (whq: string) => {
         const filtered = elementSurveys.value.filter(f => f.whq !== whq);
         elementSurveys.value = JSON.parse(JSON.stringify(filtered));
@@ -48,6 +52,7 @@ export const useElementSurveys = defineStore('element-surveys', () => {
         elementSurveys,
         batchRemoveByWHQ,
         batchRemoveBySurvey,
-        batchAdd
+        batchAdd,
+        add
     }
 })
