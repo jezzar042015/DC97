@@ -9,7 +9,6 @@
                 <div class="space-y-2 py-1">
                     <DetailItemValue label="" :value="form.categoryGroup" :bold="false" :size="'sm'" />
                     <div class="flex space-x-2 items-start">
-                        <!-- <LayersMinimilasticIcon class="h-5 mt-1" /> -->
                         <DetailItemValue :label="element.name" :value="element.component" />
                     </div>
                 </div>
@@ -18,7 +17,7 @@
             <div class="flex-1 overflow-auto px-4 bg-gray-50">
                 <div>
                     <hr class="border-dotted border-gray-300 my-2">
-                    <span class="text-gray-500">Element Information</span>
+                    <span class="text-gray-700">Element Information</span>
                     <textarea class="text-blue-500 font-medium w-full border border-gray-200 outline-0 p-2" type="text"
                         v-model="form.information"></textarea>
                 </div>
@@ -44,7 +43,7 @@
 
                 <ElementSurveyQuestion v-if="((form.adjRemainingYears ?? 0) <= 0)" :property="'adjRemainingYears'"
                     :suggested-value="survey?.remainingYears ?? 0"
-                    :question="`Do you agree that the element's remaining life is <strong>${survey?.remainingYears}</strong> years?`"
+                    :question="`Do you agree that the element's remaining life is <strong>${form?.remainingYears}</strong> years?`"
                     @update="updateForm" />
                 <div v-else class="py-3 relative">
                     <DetailItemValue label="Adjusted Remaining Years" :value="form.adjRemainingYears" />
@@ -55,7 +54,6 @@
                     :question="`What is the condition of the element?`" :options="'condition'" @update="updateForm" />
 
 
-
                 <div class="flex space-x-3 my-10">
                     <button v-if="completed" @click="confirm" class="py-2 px-4 shadow text-white bg-blue-500 rounded">
                         Confirm Evaluation
@@ -63,9 +61,6 @@
                     <button @click="close" class="py-2 px-4 shadow rounded">Cancel</button>
                 </div>
             </div>
-
-
-
         </div>
     </ModalWrapper>
 </template>
