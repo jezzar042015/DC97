@@ -6,9 +6,10 @@
                 <FacilitySurveyCard :survey="surveyStore.target" />
             </template>
 
-            <div class="space-y-3 py-5 pr-5 pl-2 shadow bg-white">
+            <div class="space-y-3 py-5 pr-2 pl-2 shadow bg-white">
                 <div>
-                    <h3 class="font-bold text-xl pl-3 uppercase pb-2">Elements &bullet; {{ surveyStore.elements.length
+                    <h3 class="font-bold text-xl pl-3 pr-3 uppercase pb-2">Elements &bullet; {{
+                        surveyStore.elements.length
                         }}
                     </h3>
                     <hr class="border-amber-400 ml-3">
@@ -48,8 +49,14 @@
         facilityStore.load(whq)
     }
 
-    const viewElementDetail = (whq: string, srcRow: number) => {
-        router.push({ name: 'element-detail', params: { whq, srcRow } })
+    const viewElementDetail = async (whq: string, srcRow: number) => {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        router.push(
+            {
+                name: 'element-detail',
+                params: { whq, srcRow }
+            }
+        )
     }
 
     onMounted(async () => {

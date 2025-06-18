@@ -1,22 +1,32 @@
 <template>
-    <div class="border-b border-b-gray-200 py-3 px-1 flex space-x-4 items-center">
-        <div
-            :class="['h-10 w-10 rounded-full flex items-center', hasCurrentElementSurvey ? 'bg-white' : 'bg-gray-200']">
-            <CheckCircle class="h-12" v-if="hasCurrentElementSurvey" />
+    <div class="border-b border-b-gray-200 py-3 px-1 flex space-x-4 items-center relative overflow-hidden transition-all duration-300 active:scale-[0.98]"
+        @click="handleClick">
+        <!-- Condition indicator - moved outside content wrapper -->
+        <div :class="['absolute text-xs -right-3 rounded-tl-full rounded-bl-full text-center flex items-center justify-center shadow text-white',
+            { 'bg-green-700': condition === 1 },
+            { 'bg-yellow-500': condition === 2 },
+            { 'bg-orange-500': condition === 3 },
+            { 'bg-red-500': condition === 4 },
+        ]" style="width: 1.5rem; height: 1.5rem; top: 50%; transform: translateY(-50%);">
+            {{ condition }}
         </div>
-        <div class="flex-1 relative">
-            <div class="text-xs">{{ element.categoryGroup }}</div>
-            <div :class="['absolute text-xs -right-4 rounded-tl-full rounded-bl-full text-center flex items-center justify-center shadow text-white',
-                { 'bg-green-700': condition === 1 },
-                { 'bg-yellow-500': condition === 2 },
-                { 'bg-orange-500': condition === 3 },
-                { 'bg-red-500': condition === 4 },
-            ]" style="width: 1.5rem; height: 1.5rem;">
-                {{ condition }}
+
+        <!-- Content wrapper -->
+        <div class="flex-1 flex space-x-4 items-center relative">
+            <div
+                :class="['h-10 w-10 rounded-full flex items-center', hasCurrentElementSurvey ? 'bg-white' : 'bg-gray-200']">
+                <CheckCircle class="h-12" v-if="hasCurrentElementSurvey" />
             </div>
-            <div class="font-medium pr-1">{{ element.name }}</div>
-            <div class="text-sm">{{ element.component }}</div>
+            <div class="flex-1 relative pr-6"> <!-- Added pr-6 to prevent text overlap -->
+                <div class="text-xs">{{ element.categoryGroup }}</div>
+                <div class="font-medium">{{ element.name }}</div>
+                <div class="text-sm">{{ element.component }}</div>
+            </div>
         </div>
+
+        <!-- Ripple effects -->
+        <Ripple v-for="ripple in ripples" :key="ripple.id" :id="ripple.id" :x="ripple.x" :y="ripple.y"
+            :size="ripple.size" @remove="removeRipple" />
     </div>
 </template>
 
@@ -26,6 +36,8 @@
     import { useSurveysStore } from '@/stores/surveys';
     import type { Element } from '@/types/element';
     import CheckCircle from './icons/CheckCircle.vue';
+    import Ripple from './Ripple.vue';
+    import { useRipple } from '@/composables/useRipple';
 
     const elementSurveys = useElementSurveys()
     const surveysStore = useSurveysStore()
@@ -63,11 +75,16 @@
         return Boolean(currentElemSurvey.value)
     })
 
-
     const condition = computed(() => {
         if (hasCurrentElementSurvey.value) {
             return currentElemSurvey.value?.condition ?? 0
         }
         return prevElemSurvey.value?.condition ?? 0
     })
+
+    const { ripples, createRipple, removeRipple } = useRipple();
+
+    const handleClick = (event: MouseEvent) => {
+        createRipple(event, event.currentTarget as HTMLElement);
+    };
 </script>

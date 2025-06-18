@@ -2,7 +2,7 @@
     <div class="fixed bottom-0 left-0 w-full px-4 py-3 bg-gray-200 shadow-2xl">
         <div class="flex justify-between space-x-8 px-10">
             <div v-for="item in navItems" :key="item.name" class="flex flex-col space-y-1 items-center cursor-pointer"
-                @click="() => router.push({ name: item.name })">
+                @click="navigate(item.name)">
                 <span :class="['text-xs', currentView === item.name ? 'text-blue-500' : 'text-black']">
                     {{ item.label }}
                 </span>
@@ -29,4 +29,6 @@
         { name: 'surveys', label: 'Evaluations', icon: CheckSquareIcon },
         { name: 'elements', label: 'Elements', icon: LayersMinimilasticIcon },
     ]
+
+    const navigate = (name: string) => router.push({ name })
 </script>
