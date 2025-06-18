@@ -19,6 +19,13 @@
                     <DetailItemValue label="Units of Measurement" :value="facilityStore.facility.measurements" />
                 </div>
             </div>
+
+            <div class="py-5 shadow bg-white" v-if="facilityStore.facility">
+                <h3 class="font-bold text-xl uppercase pb-2 px-5">Buildings</h3>
+                <hr class="border-amber-400 mx-5">
+                <FacilityBuildings  :whq="facilityStore.facility.whq"/>
+            </div>
+
             <div class="py-5 shadow bg-white">
                 <h3 class="font-bold text-xl uppercase pb-2 px-5">Evaluation Visit</h3>
                 <hr class="border-amber-400 mx-5">
@@ -51,6 +58,7 @@
     import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
     import NavigationBar from '@/components/NavigationBar.vue';
     import RightArrowIcon from '@/components/icons/RightArrowIcon.vue';
+import FacilityBuildings from '@/components/FacilityBuildings.vue';
 
     const facilityStore = useFacilityStore()
     const surveysStore = useSurveysStore()
