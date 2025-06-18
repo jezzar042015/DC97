@@ -32,7 +32,7 @@
                 <div class="py-4 px-2" v-if="previousFev">
                     <div class="flex justify-between py-3 px-4 rounded shadow"
                         @click="viewSurveyItems(previousFev?.uniqueKey)">
-                        <div class="text-2xl font-bold text-gray-700">{{ previousFevYear }} FEV</div>
+                        <div class="text-2xl font-bold text-gray-700">{{ previousFevYear }} FCS</div>
                         <RightArrowIcon class="h-10" />
                     </div>
                 </div>
