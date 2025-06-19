@@ -34,7 +34,7 @@
     <NavigationBar />
     <SurveyForm v-if="surveyForm === 'facility-survey'" @unload-survey-form="unloadSurveyForm" />
     <ElementSurveyForm v-if="surveyForm === 'element-survey' && elementStore.element" :element="elementStore.element"
-        @unload-survey-form="unloadSurveyForm" />
+        :mode="formMode" @unload-survey-form="unloadSurveyForm" />
 </template>
 
 <script setup lang="ts">
@@ -62,9 +62,11 @@
     const prevElement = ref<Element | undefined>()
 
     const surveyForm = ref<'facility-survey' | 'element-survey' | ''>('')
+    const formMode = ref<'new' | 'update'>('new')
 
-    const loadSurveyForm = (form: 'facility-survey' | 'element-survey') => {
+    const loadSurveyForm = (form: 'facility-survey' | 'element-survey', mode: 'new' | 'update' = 'new') => {
         surveyForm.value = form
+        formMode.value = mode
     }
 
     const unloadSurveyForm = (next?: string) => {

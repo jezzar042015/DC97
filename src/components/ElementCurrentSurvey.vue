@@ -1,5 +1,6 @@
 <template>
-    <ElementSurveyCard v-if="survey" :element="element" :scope="'current'" />
+    <ElementSurveyCard v-if="survey" :element="element" :scope="'current'"
+        @update-survey="loadSurveyForm('element-survey', 'update')" />
 
     <div v-else class="mt-5">
         <RippledButton v-if="!currentSurvey" label="Start Current Facility Evaluation"
@@ -39,9 +40,9 @@
         return elementSurveys.elementSurveys.find(e => e.key === (element.uniqueKey) && e.surveyKey === currentSurvey.value?.uniqueKey)
     })
 
-    const loadSurveyForm = async (form: 'facility-survey' | 'element-survey' | '') => {
+    const loadSurveyForm = async (form: 'facility-survey' | 'element-survey' | '', mode: 'new' | 'update' = 'new') => {
         await new Promise(resolve => setTimeout(resolve, 200));
-        emits('load-survey-form', form)
+        emits('load-survey-form', form, mode)
     }
 
 

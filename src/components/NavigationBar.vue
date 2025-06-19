@@ -26,7 +26,6 @@
     ]
 
     const navigate = async (name: string) => {
-        await new Promise(resolve => setTimeout(resolve, 200));
         router.push({ name })
     }
 </script>

@@ -10,12 +10,15 @@
 </template>
 
 <script setup lang="ts">
+    import type { RippleColor } from '@/data/lib/themes';
     import { computed } from 'vue';
 
-    type RippleColor = 'blue' | 'green'
     const bgColorLibrary: Record<RippleColor, string> = {
         'blue': 'bg-blue-300',
         'green': 'bg-emerald-300',
+        'yellow': 'bg-yellow-100',
+        'orange': 'bg-orange-300',
+        'red': 'bg-red-300',
     }
 
     const { id,

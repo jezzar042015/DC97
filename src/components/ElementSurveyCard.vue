@@ -3,7 +3,7 @@
         <div class="px-3 relative">
             <h3 class="font-bold text-xl uppercase pb-2">{{ surveyYear }} Evaluation</h3>
             <hr class="border-amber-400">
-            <UpdateIcon v-if="scope == 'current'" class="h-5 absolute right-2 top-1" />
+            <UpdateIcon v-if="scope == 'current'" class="h-5 absolute right-2 top-1" @click="emits('update-survey')" />
         </div>
         <div v-if="survey" class="space-y-2">
             <div :class="['flex justify-between space-x-4 rounded shadow py-2 px-4',
@@ -44,6 +44,7 @@
         scope: 'previous' | 'current'
     }>()
 
+    const emits = defineEmits(['update-survey'])
     const elementSurveys = useElementSurveys()
     const surveysStore = useSurveysStore()
 

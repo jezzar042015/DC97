@@ -112,9 +112,17 @@
 
     const survey = computed(() => {
         if (!previousSurvey.value) return null
+
+        let uniqueKey = '';
+        if (mode === 'new') {
+            uniqueKey = previousSurvey.value?.uniqueKey ?? '';
+        } else if (mode === 'update') {
+            uniqueKey = currentSurvey.value?.uniqueKey ?? '';
+        }
+
         return elementSurveys.elementSurveys.find(e =>
             e.key === (element.uniqueKey) &&
-            e.surveyKey === previousSurvey.value?.uniqueKey &&
+            e.surveyKey === uniqueKey &&
             e.srcRow === element.srcRow
         )
     })
@@ -134,10 +142,8 @@
     })
 
     const completed = computed(() => {
-        return ((form.value.qty ?? 0) >= 0) &&
-            (form.value.lastYear ?? 0 > 1990) &&
-            ((form.value.adjRemainingYears ?? 0) >= 0) &&
-            ([1, 2, 3, 4].includes(form.value.condition ?? 0))
+        const requiredProps = ['qty', 'lastYear', 'adjRemainingYears', 'condition']
+        return requiredProps.every(prop => completedItems.value.includes(prop))
     })
 
     type FormKeys = keyof typeof form.value;
@@ -177,13 +183,22 @@
         (n) => {
             if (!n) return
             form.value.surveyKey = n.uniqueKey
-            form.value.remainingYears = element.life - (n.year - (survey.value?.lastYear ?? 0))
+            form.value.remainingYears = element.life - (n.year - (form.value.lastYear ?? 0))
             form.value.adjRemainingYears = form.value.remainingYears
         },
         {
             immediate: true
         }
     );
+
+    // TODO: Erronous Here
+    watch(
+        () => form.value.lastYear,
+        (n) => {
+            form.value.remainingYears = element.life - (currentSurvey.value?.year ?? 0 - (n ?? 0))
+            form.value.adjRemainingYears = form.value.remainingYears
+        }
+    )
 
     onMounted(() => {
         if (mode == 'update') {
