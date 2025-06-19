@@ -21,7 +21,7 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <DetailItemValue label="Last Major Renovation" :value="bldg.renMajYear" v-if="bldg.renMajYear" />
-                <DetailItemValue label="Projected Major Reno" :value="bldg.projRenYear" />
+                <DetailItemValue label="Projected Major Renovation" :value="bldg.projRenYear" />
             </div>
         </div>
         <Ripple v-for="ripple in ripples" :key="ripple.id" :id="ripple.id" :x="ripple.x" :y="ripple.y"
@@ -33,7 +33,7 @@
     import { useRipple } from '@/composables/useRipple';
     import type { Building } from '@/types/building';
     import Ripple from './Ripple.vue';
-import DetailItemValue from './DetailItemValue.vue';
+    import DetailItemValue from './DetailItemValue.vue';
 
     const { bldg, i } = defineProps<{
         bldg: Building,

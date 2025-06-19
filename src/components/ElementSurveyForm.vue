@@ -22,32 +22,36 @@
                         v-model="form.information"></textarea>
                 </div>
 
-                <ElementSurveyQuestion v-if="(form.qty ?? -1) < 0" :property="'qty'" :suggested-value="survey?.qty ?? 0"
-                    :question="`Is the quantity of the element <strong>${survey?.qty} ${element.qtyUnit}</strong>?`"
-                    @update="updateForm" />
+                <div>
+                    <ElementSurveyQuestion v-if="!completedItems.includes('qty')" :property="'qty'"
+                        :suggested-value="form.qty ?? 0"
+                        :question="`Is the quantity of the element <strong>${form.qty} ${element.qtyUnit}</strong>?`"
+                        @update="updateForm" />
 
-                <div v-else class="py-3 relative">
-                    <DetailItemValue label="Quantity" :value="`${form.qty} ${element.qtyUnit}`" />
-                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
+                    <div v-else class="py-3 relative">
+                        <DetailItemValue label="Quantity" :value="`${form.qty} ${element.qtyUnit}`" />
+                        <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" @click="removeAsCompleted('qty')" />
+                    </div>
                 </div>
 
-                <ElementSurveyQuestion v-if="((form.lastYear ?? 0) === 0)" :property="'lastYear'"
-                    :suggested-value="survey?.lastYear ?? 0"
-                    :question="`Was the element last added or replaced in <strong>${survey?.lastYear}</strong>?`"
+                <ElementSurveyQuestion v-if="!completedItems.includes('lastYear')" :property="'lastYear'"
+                    :suggested-value="form.lastYear ?? 0"
+                    :question="`Was the element last added or replaced in <strong>${form.lastYear}</strong>?`"
                     @update="updateForm" />
 
                 <div v-else class="py-3 relative">
                     <DetailItemValue label="Latest Year Added or Replaced" :value="form.lastYear" />
-                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
+                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" @click="removeAsCompleted('lastYear')" />
                 </div>
 
-                <ElementSurveyQuestion v-if="((form.adjRemainingYears ?? 0) <= 0)" :property="'adjRemainingYears'"
-                    :suggested-value="survey?.remainingYears ?? 0"
-                    :question="`Do you agree that the element's remaining life is <strong>${form?.remainingYears}</strong> years?`"
+                <ElementSurveyQuestion v-if="!completedItems.includes('adjRemainingYears')"
+                    :property="'adjRemainingYears'" :suggested-value="form.adjRemainingYears ?? 0"
+                    :question="`Do you agree that the element's remaining life is <strong>${form.adjRemainingYears}</strong> years?`"
                     @update="updateForm" />
                 <div v-else class="py-3 relative">
                     <DetailItemValue label="Adjusted Remaining Years" :value="form.adjRemainingYears" />
-                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" />
+                    <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30"
+                        @click="removeAsCompleted('adjRemainingYears')" />
                 </div>
 
                 <ElementSurveyQuestion :property="'condition'" :suggested-value="form.condition ?? 1"
@@ -66,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ref, watch } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
     import { useSurveysStore } from '@/stores/surveys';
     import { useElementSurveys } from '@/stores/element.surveys';
     import type { ConditionNumber, Element } from '@/types/element';
@@ -81,9 +85,14 @@
     const surveysStore = useSurveysStore()
     const elementSurveys = useElementSurveys()
 
-    const { element } = defineProps<{
+    const { element, mode = 'new' } = defineProps<{
         element: Element
+        mode?: 'new' | 'update'
     }>()
+
+    const completedItems = ref<string[]>([])
+    const addAsCompleted = (property: string) => completedItems.value.push(property)
+    const removeAsCompleted = (property: string) => completedItems.value = completedItems.value.filter(p => p !== property)
 
     const previousSurvey = computed(() => {
         const surveys = surveysStore.items
@@ -135,6 +144,7 @@
     const updateForm = (property: FormKeys, value: ConditionNumber | string | number) => {
         // @ts-expect-error: Type narrowing is handled by the caller
         form.value[property] = value
+        addAsCompleted(property)
     }
 
     const confirm = async () => {
@@ -153,6 +163,9 @@
             form.value.key = n.key
             form.value.condition = n.condition
             form.value.information = n.information
+
+            form.value.qty = n.qty
+            form.value.lastYear = n.lastYear
         },
         {
             immediate: true
@@ -165,10 +178,19 @@
             if (!n) return
             form.value.surveyKey = n.uniqueKey
             form.value.remainingYears = element.life - (n.year - (survey.value?.lastYear ?? 0))
+            form.value.adjRemainingYears = form.value.remainingYears
         },
         {
             immediate: true
         }
     );
+
+    onMounted(() => {
+        if (mode == 'update') {
+            completedItems.value = [
+                'qty', 'lastYear', 'adjRemainingYears', 'condition'
+            ]
+        }
+    })
 
 </script>

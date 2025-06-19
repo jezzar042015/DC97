@@ -39,7 +39,7 @@
             <div>
                 <div>
                     <div>{{ defination.label }}</div>
-                    <div class="text-sm text-gray-500">{{ defination.desc }}</div>
+                    <div class="text-sm text-gray-500 h-12">{{ defination.desc }}</div>
                 </div>
             </div>
         </div>

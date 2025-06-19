@@ -2,13 +2,11 @@
     <ElementSurveyCard v-if="survey" :element="element" :scope="'current'" />
 
     <div v-else class="mt-5">
-        <button v-if="!currentSurvey" class="shadow py-3 w-full bg-blue-700 text-white"
-            @click="loadSurveyForm('facility-survey')">
-            Start Current Facility Evaluation
-        </button>
-        <button v-else class="shadow py-3 w-full bg-blue-700 text-white" @click="loadSurveyForm('element-survey')">
-            Start Element Evaluation
-        </button>
+        <RippledButton v-if="!currentSurvey" label="Start Current Facility Evaluation"
+            @click="loadSurveyForm('facility-survey')" />
+
+        <RippledButton v-else label="Start Element Evaluation" @click="loadSurveyForm('element-survey')" />
+
     </div>
 </template>
 
@@ -18,6 +16,7 @@
     import { useElementSurveys } from '@/stores/element.surveys';
     import type { Element } from '@/types/element';
     import ElementSurveyCard from './ElementSurveyCard.vue';
+    import RippledButton from './RippledButton.vue';
 
     const { element } = defineProps<{
         element: Element
@@ -40,7 +39,8 @@
         return elementSurveys.elementSurveys.find(e => e.key === (element.uniqueKey) && e.surveyKey === currentSurvey.value?.uniqueKey)
     })
 
-    const loadSurveyForm = (form: 'facility-survey' | 'element-survey' | '') => {
+    const loadSurveyForm = async (form: 'facility-survey' | 'element-survey' | '') => {
+        await new Promise(resolve => setTimeout(resolve, 200));
         emits('load-survey-form', form)
     }
 

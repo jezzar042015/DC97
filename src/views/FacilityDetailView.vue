@@ -23,19 +23,21 @@
             <div class="py-5 shadow bg-white" v-if="facilityStore.facility">
                 <h3 class="font-bold text-xl uppercase pb-2 px-5">Buildings</h3>
                 <hr class="border-amber-400 mx-5">
-                <FacilityBuildings  :whq="facilityStore.facility.whq"/>
+                <FacilityBuildings :whq="facilityStore.facility.whq" />
             </div>
 
-            <div class="py-5 shadow bg-white">
+            <div class="py-5 shadow bg-white" v-if="facilityStore.facility">
                 <h3 class="font-bold text-xl uppercase pb-2 px-5">Evaluation Visit</h3>
                 <hr class="border-amber-400 mx-5">
-                <div class="py-4 px-2" v-if="previousFev">
-                    <div class="flex justify-between py-3 px-4 rounded shadow"
-                        @click="viewSurveyItems(previousFev?.uniqueKey)">
-                        <div class="text-2xl font-bold text-gray-700">{{ previousFevYear }} FCS</div>
-                        <RightArrowIcon class="h-10" />
-                    </div>
+
+                <div class="py-2">
+                    <FacilitySurveyItem v-if="previousFev" :survey="previousFev"
+                        @click="viewSurveyItems(previousFev.uniqueKey)" />
+
+                    <FacilitySurveyItem v-if="currentFev" :survey="currentFev"
+                        @click="viewSurveyItems(currentFev.uniqueKey)" />
                 </div>
+
 
             </div>
             <div class="p-3 shadow bg-white">
@@ -57,8 +59,8 @@
     import DetailItemValue from '@/components/DetailItemValue.vue';
     import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
     import NavigationBar from '@/components/NavigationBar.vue';
-    import RightArrowIcon from '@/components/icons/RightArrowIcon.vue';
-import FacilityBuildings from '@/components/FacilityBuildings.vue';
+    import FacilityBuildings from '@/components/FacilityBuildings.vue';
+    import FacilitySurveyItem from '@/components/FacilitySurveyItem.vue';
 
     const facilityStore = useFacilityStore()
     const surveysStore = useSurveysStore()
@@ -71,13 +73,19 @@ import FacilityBuildings from '@/components/FacilityBuildings.vue';
         return previous
     })
 
-    const previousFevYear = computed(() => {
-        if (!previousFev.value) return ''
-        return previousFev.value.year
+    const currentFev = computed(() => {
+        if (!facilityStore.facility) return null
+        const { newSurvey } = surveysStore.getByFacility(facilityStore.facility.whq)
+        if (!newSurvey) return null
+        return newSurvey
     })
 
-    const viewSurveyItems = (key: string) => {
-        router.push({ name: 'survey-detail', params: { key } })
+    const viewSurveyItems = async (key: string) => {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        router.push({
+            name: 'survey-detail',
+            params: { key }
+        })
     }
 
     const loadUrlWhq = async () => {
