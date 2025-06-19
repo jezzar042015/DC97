@@ -24,6 +24,7 @@
                 <div class="space-x-3 items-center">
                     <div class="text-orange-400">{{ elementStore.element.name }}</div>
                     <div class="font-bold text-xl text-orange-400">{{ elementStore.element.component }}</div>
+                    <div class="text-sm py-3 text-blue-500" @click="loadHelper">See component's defination</div>
                 </div>
             </div>
 
@@ -33,6 +34,7 @@
     </main>
     <NavigationBar />
     <SurveyForm v-if="surveyForm === 'facility-survey'" @unload-survey-form="unloadSurveyForm" />
+    <ComponentDefination v-if="helper && elementStore.element" :elem="elementStore.element" @close="unloadHelper" />
     <ElementSurveyForm v-if="surveyForm === 'element-survey' && elementStore.element" :element="elementStore.element"
         :mode="formMode" @unload-survey-form="unloadSurveyForm" />
 </template>
@@ -45,6 +47,7 @@
     import { useElementStore } from '@/stores/element'
     import { useFacilityStore } from '@/stores/facility'
     import type { Element } from '@/types/element'
+    import type { FormMode } from '@/data/lib/form'
 
     import DetailItemValue from '@/components/DetailItemValue.vue'
     import ElementSurveyCard from '@/components/ElementSurveyCard.vue'
@@ -53,6 +56,7 @@
     import ElementSurveyForm from '@/components/ElementSurveyForm.vue'
     import NavigationBar from '@/components/NavigationBar.vue'
     import LeftArrow from '@/components/icons/LeftArrow.vue'
+    import ComponentDefination from '@/components/ComponentDefination.vue'
 
     const elementStore = useElementStore()
     const facilityStore = useFacilityStore()
@@ -62,9 +66,13 @@
     const prevElement = ref<Element | undefined>()
 
     const surveyForm = ref<'facility-survey' | 'element-survey' | ''>('')
-    const formMode = ref<'new' | 'update'>('new')
+    const formMode = ref<FormMode>('new')
 
-    const loadSurveyForm = (form: 'facility-survey' | 'element-survey', mode: 'new' | 'update' = 'new') => {
+    const helper = ref(false)
+    const loadHelper = () => helper.value = true
+    const unloadHelper = () => helper.value = false
+
+    const loadSurveyForm = (form: 'facility-survey' | 'element-survey', mode: FormMode = 'new') => {
         surveyForm.value = form
         formMode.value = mode
     }

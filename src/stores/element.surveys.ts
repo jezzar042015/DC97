@@ -32,8 +32,22 @@ export const useElementSurveys = defineStore('element-surveys', () => {
         ]
     }
 
-    const add = async (elementSurve: ElementSurvey) => {
-        elementSurveys.value.push(elementSurve);
+    const add = async (elementSurvey: ElementSurvey) => {
+        elementSurveys.value.push(elementSurvey);
+        await waitUntilFinished()
+    }
+
+    const update = async (elementSurvey: ElementSurvey) => {
+        const index = elementSurveys.value.findIndex(s =>
+            s.whq === elementSurvey.whq &&
+            s.srcRow === elementSurvey.srcRow &&
+            s.surveyKey === elementSurvey.surveyKey
+        )
+
+        if (index) {
+            elementSurveys.value[index] = elementSurvey;
+        }
+
         await waitUntilFinished()
     }
 
@@ -54,6 +68,7 @@ export const useElementSurveys = defineStore('element-surveys', () => {
         batchRemoveByWHQ,
         batchRemoveBySurvey,
         batchAdd,
-        add
+        add,
+        update
     }
 })

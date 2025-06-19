@@ -18,6 +18,7 @@
     import type { Element } from '@/types/element';
     import ElementSurveyCard from './ElementSurveyCard.vue';
     import RippledButton from './RippledButton.vue';
+    import type { FormMode } from '@/data/lib/form';
 
     const { element } = defineProps<{
         element: Element
@@ -37,10 +38,14 @@
 
     const survey = computed(() => {
         if (!currentSurvey.value) return null
-        return elementSurveys.elementSurveys.find(e => e.key === (element.uniqueKey) && e.surveyKey === currentSurvey.value?.uniqueKey)
+        return elementSurveys.elementSurveys.find(e =>
+            e.key === element.uniqueKey &&
+            e.srcRow === element.srcRow &&
+            e.surveyKey === currentSurvey.value?.uniqueKey
+        )
     })
 
-    const loadSurveyForm = async (form: 'facility-survey' | 'element-survey' | '', mode: 'new' | 'update' = 'new') => {
+    const loadSurveyForm = async (form: 'facility-survey' | 'element-survey' | '', mode: FormMode = 'new') => {
         await new Promise(resolve => setTimeout(resolve, 200));
         emits('load-survey-form', form, mode)
     }

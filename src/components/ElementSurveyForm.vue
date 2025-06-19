@@ -23,7 +23,7 @@
                 </div>
 
                 <div>
-                    <ElementSurveyQuestion v-if="!completedItems.includes('qty')" :property="'qty'"
+                    <ElementSurveyQuestion :mode="mode" v-if="!completedItems.includes('qty')" :property="'qty'"
                         :suggested-value="form.qty ?? 0"
                         :question="`Is the quantity of the element <strong>${form.qty} ${element.qtyUnit}</strong>?`"
                         @update="updateForm" />
@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <ElementSurveyQuestion v-if="!completedItems.includes('lastYear')" :property="'lastYear'"
+                <ElementSurveyQuestion :mode="mode" v-if="!completedItems.includes('lastYear')" :property="'lastYear'"
                     :suggested-value="form.lastYear ?? 0"
                     :question="`Was the element last added or replaced in <strong>${form.lastYear}</strong>?`"
                     @update="updateForm" />
@@ -44,7 +44,7 @@
                     <UpdateIcon class="absolute right-3 top-8 h-6 opacity-30" @click="removeAsCompleted('lastYear')" />
                 </div>
 
-                <ElementSurveyQuestion v-if="!completedItems.includes('adjRemainingYears')"
+                <ElementSurveyQuestion :mode="mode" v-if="!completedItems.includes('adjRemainingYears')"
                     :property="'adjRemainingYears'" :suggested-value="form.adjRemainingYears ?? 0"
                     :question="`Do you agree that the element's remaining life is <strong>${form.adjRemainingYears}</strong> years?`"
                     @update="updateForm" />
@@ -54,7 +54,7 @@
                         @click="removeAsCompleted('adjRemainingYears')" />
                 </div>
 
-                <ElementSurveyQuestion :property="'condition'" :suggested-value="form.condition ?? 1"
+                <ElementSurveyQuestion :mode="mode" :property="'condition'" :suggested-value="form.condition ?? 1"
                     :question="`What is the condition of the element?`" :options="'condition'" @update="updateForm" />
 
 
@@ -75,6 +75,7 @@
     import { useElementSurveys } from '@/stores/element.surveys';
     import type { ConditionNumber, Element } from '@/types/element';
     import type { ElementSurvey } from '@/types/elementSurvey';
+    import type { FormMode } from '@/data/lib/form';
     import ModalWrapper from './ModalWrapper.vue';
     import DetailItemValue from './DetailItemValue.vue';
     import ElementSurveyQuestion from './ElementSurveyQuestion.vue';
@@ -87,7 +88,7 @@
 
     const { element, mode = 'new' } = defineProps<{
         element: Element
-        mode?: 'new' | 'update'
+        mode?: FormMode
     }>()
 
     const completedItems = ref<string[]>([])
@@ -155,7 +156,11 @@
 
     const confirm = async () => {
         const storable = JSON.parse(JSON.stringify(form.value))
-        await elementSurveys.add(storable);
+        if (mode == 'new') {
+            await elementSurveys.add(storable);
+        } else if (mode == 'update') {
+            await elementSurveys.update(storable);
+        }
         emits('unload-survey-form', '')
     }
 

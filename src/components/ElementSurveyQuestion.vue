@@ -44,6 +44,7 @@
     import { onClickOutside } from '@vueuse/core'
     import type { ConditionNumber } from '@/types/element';
     import ElementConditionButton from './ElementConditionButton.vue';
+    import type { FormMode } from '@/data/lib/form';
 
     const overriding = ref(false);
     const override = ref<string | null>(null)
@@ -56,11 +57,12 @@
         desc: ''
     })
 
-    const { question, property, suggestedValue, options = 'yes-no' } = defineProps<{
+    const { question, property, suggestedValue, options = 'yes-no', mode } = defineProps<{
         question: string
         property: 'qty' | 'lastYear' | 'adjRemainingYears' | 'condition'
         options?: 'yes-no' | 'condition',
         suggestedValue: string | number | ConditionNumber
+        mode: FormMode
     }>()
 
     const emits = defineEmits(['update'])
@@ -93,7 +95,13 @@
     }
 
     const unloadOverride = () => {
-        overriding.value = false
+        if (mode == 'new') {
+            overriding.value = false
+        }
+
+        if (mode == 'update') {
+            emits('update', property, suggestedValue)
+        }
     }
 
     const validOverride = computed(() => {
@@ -123,6 +131,10 @@
     onMounted(() => {
         if (property == 'condition') {
             updateConditionDefination(suggestedValue as ConditionNumber)
+        }
+
+        if (mode == 'update') {
+            loadOverride()
         }
     })
 
