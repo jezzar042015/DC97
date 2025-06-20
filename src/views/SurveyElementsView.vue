@@ -1,17 +1,9 @@
 <template>
     <main class="h-screen bg-gray-100">
         <div class="px-4 pb-4 pt-12 h-full space-y-2">
-            <div class="w-full">
-                <div class="flex space-x-2">
-                    <input type="search" class="bg-white shadow p-3 outline-0 rounded-sm" placeholder="Search">
-                    <div>
-                        <button class="bg-white shadow py-4 px-5 text-sm rounded-sm whitespace-nowrap"> Show
-                            Filter</button>
-                    </div>
-                </div>
-            </div>
+            <ElementsFilter :keywords="keyWords" @update-search="updateSearch" />
             <div class="px-4 bg-white">
-                <template v-for="element in elementsStore.elements" :key="`${element.whq}_${element.srcRow}`">
+                <template v-for="element in filtered" :key="`${element.whq}_${element.srcRow}`">
                     <ElementListItem :element="element" @click="viewElement(element.whq, element.srcRow)" />
                 </template>
             </div>
@@ -22,15 +14,36 @@
 </template>
 
 <script setup lang="ts">
-    import ElementListItem from '@/components/ElementListItem.vue';
-    import NavigationBar from '@/components/NavigationBar.vue';
+    import { computed, ref } from 'vue';
     import { useElementsStore } from '@/stores/elements';
     import { useRouter } from 'vue-router';
+    import ElementListItem from '@/components/ElementListItem.vue';
+    import ElementsFilter from '@/components/ElementsFilter.vue';
+    import NavigationBar from '@/components/NavigationBar.vue';
 
     const elementsStore = useElementsStore()
     const router = useRouter()
+    const keyWords = ref('')
 
-    const viewElement = (whq: string, srcRow: number) => {
+    const updateSearch = (search: string) => {
+        keyWords.value = search
+    }
+
+    const filtered = computed(() => {
+
+        if (keyWords.value) {
+            const search = keyWords.value.toLowerCase()
+            return elementsStore.elements.filter((e) => {
+                const elementString = JSON.stringify(e).toLowerCase()
+                return elementString.includes(search)
+            })
+        }
+
+        return elementsStore.elements
+    })
+
+    const viewElement = async (whq: string, srcRow: number) => {
+        await new Promise(resolve => setTimeout(resolve, 200));
         router.push(
             {
                 name: 'element-detail',

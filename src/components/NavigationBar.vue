@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 left-0 w-full px-0 py-0 bg-white shadow-2xl">
+    <div class="fixed bottom-0 left-0 w-full px-0 py-0 bg-white shadow-2xl overflow-hidden">
         <div class="flex justify-between space-x-0 px-5 max-h-15">
             <template v-for="item in navItems" :key="item.name">
                 <NavigationTarget :item="item" @click="navigate(item.name)" />

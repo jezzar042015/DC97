@@ -1,5 +1,5 @@
 <template>
-    <div class="min-w-20 flex flex-col px-0 py-3 h-24 w-28 space-y-1 items-center cursor-pointer relative overflow-hidden transition-all duration-300 active:scale-[0.98]"
+    <div class="min-w-20 flex flex-col pt-7 py-3 -mt-5 h-24 w-28 rounded-full space-y-1 items-center cursor-pointer relative overflow-hidden transition-all duration-300 active:scale-[0.98]"
         @click="handleClick">
         <span :class="['text-xs', currentView === item.name ? 'text-blue-500' : 'text-black']">
             {{ item.label }}
