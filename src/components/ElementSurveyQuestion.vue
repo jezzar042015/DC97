@@ -30,8 +30,8 @@
             </div>
             <div>
                 <div>
-                    <div>{{ defination.label }}</div>
-                    <div class="text-sm text-gray-500 h-12">{{ defination.desc }}</div>
+                    <div>{{ definition.label }}</div>
+                    <div class="text-sm text-gray-500 h-12">{{ definition.desc }}</div>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
     const overriding = ref(false);
     const override = ref<string | null>(null)
 
-    const defination = ref<{
+    const definition = ref<{
         label: string
         desc: string
     }>({
@@ -123,8 +123,8 @@
         if (!condition) return
         const res = elementConditionDescriptions[condition]
         if (res) {
-            defination.value.desc = res.desc
-            defination.value.label = res.label
+            definition.value.desc = res.desc
+            definition.value.label = res.label
         }
     }
 

@@ -7,9 +7,8 @@
                     <div class="text-xl">ELEMENT EVALUATION</div>
                 </div>
                 <hr class="border-amber-400 mt-2">
-                <div v-if="facilityStore.facility" class="">
-                    <DetailItemValue :label="`${facilityStore.facility.primaryUse}  (${facilityStore.facility.whq})`"
-                        :value="facilityStore.facility.location" />
+                <div v-if="facility" class="">
+                    <DetailItemValue :label="`${facility.primaryUse}  (${facility.whq})`" :value="facility.location" />
                     <hr class="border-amber-400 mt-2">
                 </div>
 
@@ -24,7 +23,7 @@
                 <div class="space-x-3 items-center">
                     <div class="text-orange-400">{{ elementStore.element.name }}</div>
                     <div class="font-bold text-xl text-orange-400">{{ elementStore.element.component }}</div>
-                    <div class="text-sm py-3 text-blue-500" @click="loadHelper">See component's defination</div>
+                    <div class="text-sm py-3 text-blue-500" @click="loadHelper">See component's definition</div>
                 </div>
             </div>
 
@@ -40,13 +39,15 @@
 </template>
 
 <script setup lang="ts">
-    import { onMounted, ref, useTemplateRef, watch } from 'vue'
+    import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
     import { useRouter } from 'vue-router'
     import { useSwipe } from '@vueuse/core'
 
     import { useElementStore } from '@/stores/element'
     import { useFacilityStore } from '@/stores/facility'
+    import { useFacilitiesStore } from '@/stores/facilities'
     import type { Element } from '@/types/element'
+    import type { Facility } from '@/types/facility'
     import type { FormMode } from '@/data/lib/form'
 
     import DetailItemValue from '@/components/DetailItemValue.vue'
@@ -60,10 +61,15 @@
 
     const elementStore = useElementStore()
     const facilityStore = useFacilityStore()
+    const facilitiesStore = useFacilitiesStore()
     const router = useRouter()
 
     const nextElement = ref<Element | undefined>()
     const prevElement = ref<Element | undefined>()
+
+    const facility = computed(() => {
+        return facilitiesStore.facilities.find(f => f.whq === elementStore.element?.whq)
+    })
 
     const surveyForm = ref<'facility-survey' | 'element-survey' | ''>('')
     const formMode = ref<FormMode>('new')

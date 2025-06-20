@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed bottom-0 left-0 w-full px-4 py-0 bg-white shadow-2xl">
-        <div class="flex justify-between space-x-4 px-5">
+    <div class="fixed bottom-0 left-0 w-full px-0 py-0 bg-white shadow-2xl">
+        <div class="flex justify-between space-x-0 px-5 max-h-15">
             <template v-for="item in navItems" :key="item.name">
                 <NavigationTarget :item="item" @click="navigate(item.name)" />
             </template>
@@ -26,6 +26,7 @@
     ]
 
     const navigate = async (name: string) => {
+        await new Promise(resolve => setTimeout(resolve, 200));
         router.push({ name })
     }
 </script>

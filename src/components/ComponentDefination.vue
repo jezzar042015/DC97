@@ -6,7 +6,7 @@
                 <div class="text-xl font-bold">{{ elem.component }}</div>
                 <hr class="border-amber-400 mt-2">
                 <div v-if="dictionary">
-                    <p class="py-2 font-medium">{{ dictionary.defination }}</p>
+                    <p class="py-2 font-medium">{{ dictionary.definition }}</p>
 
                     <div v-if="dictionary.photos" class="space-y-2">
                         <img class="w-full" v-for="img in dictionary.photos" :src="`/facility-components/${img}`"
@@ -14,7 +14,7 @@
                     </div>
                 </div>
 
-                <p v-else class="pt-2 text-gray-400">Sorry! No defination is added for this component yet</p>
+                <p v-else class="pt-2 text-gray-400">Sorry! No definition is added for this component yet</p>
 
 
             </div>

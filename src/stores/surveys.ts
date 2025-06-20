@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
 import { useIDBKeyval } from "@vueuse/integrations/useIDBKeyval.mjs";
 import type { Survey } from "@/types/survey";
-import { watch } from "vue";
+import { computed, watch } from "vue";
 
 export const useSurveysStore = defineStore('surveys', () => {
     const { data: items, isFinished } = useIDBKeyval<Survey[]>(
         'dc97-surveys',
         []
     )
+
+    const orderedList = computed(() => {
+        return items.value.sort((a, b) => b.date.localeCompare(a.date) && b.whq.localeCompare(a.whq))
+    })
 
     const waitUntilFinished = async () => {
         if (isFinished.value) return;
@@ -52,6 +56,7 @@ export const useSurveysStore = defineStore('surveys', () => {
 
     return {
         items,
+        orderedList,
         add,
         remove,
         getByFacility,

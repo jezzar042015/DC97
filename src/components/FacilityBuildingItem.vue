@@ -10,10 +10,10 @@
                 <DetailItemValue label="Building WHQ" :value="bldg.whq" />
                 <DetailItemValue label="Occupancy" :value="bldg.occupancy" />
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <DetailItemValue label="Building Condition" :value="bldg.building" />
-                <DetailItemValue label="Maintenance Condition" :value="bldg.maintenance" />
-            </div>
+
+            <DetailItemValue label="Building Condition" :value="bldg.building" />
+            <DetailItemValue label="Maintenance Condition" :value="bldg.maintenance" />
+
             <div class="grid grid-cols-3 gap-2">
                 <DetailItemValue label="Construction" :value="bldg.construction" />
                 <DetailItemValue label="Gross Floor Area" :value="bldg.gfa" />
@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
     import { useRipple } from '@/composables/useRipple';
+    import { useRouter } from 'vue-router';
     import type { Building } from '@/types/building';
     import Ripple from './Ripple.vue';
     import DetailItemValue from './DetailItemValue.vue';
@@ -39,10 +40,23 @@
         bldg: Building,
         i: number
     }>()
+    const router = useRouter()
+
     const { ripples, createRipple, removeRipple } = useRipple();
 
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = async (event: MouseEvent) => {
         createRipple(event, event.currentTarget as HTMLElement);
+        await new Promise(resolve => setTimeout(resolve, 200));
+        editBldg()
     };
+
+    const editBldg = async () => {
+        router.push({
+            name: 'bldg-form',
+            params: {
+                bldgwhq: bldg.whq
+            }
+        })
+    }
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <main class="h-screen bg-gray-50">
+    <main class="h-full bg-gray-100">
         <div class="px-4 pb-24 pt-12 space-y-3">
             <div v-if="facilityStore.facility" class="space-y-3 p-5 shadow bg-white">
                 <div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="py-5 shadow bg-white" v-if="facilityStore.facility">
-                <h3 class="font-bold text-xl uppercase pb-2 px-5">Evaluation Visit</h3>
+                <h3 class="font-bold text-xl uppercase pb-2 px-5">Evaluation Visits</h3>
                 <hr class="border-amber-400 mx-5">
 
                 <div class="py-2">

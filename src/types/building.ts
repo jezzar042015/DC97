@@ -36,3 +36,32 @@ type MaintenanceCondition =
     'Average' |
     'Good' |
     'Poor'
+
+
+export const bldgOccupancyOptions: OccupancyType[] = [
+    "Educational",
+    "Health Care",
+    "Meeting Place",
+    "Office",
+    "Parking",
+    "Production",
+    "Residential",
+    "Shops",
+    "Storage",
+    "Studio",
+    "Unknown",
+    "Utility"
+]
+
+export const bldgMaintenanceConditionOptions: MaintenanceCondition[] = [
+    'Average',
+    'Good',
+    'Poor'
+]
+
+export const bldgConditionOptions: BuildingCondition[] = [
+    "Major Renovation Needed",
+    "Minor Renovation Needed",
+    "Replace or Dispose of",
+    "No Construction Needed"
+]

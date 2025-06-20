@@ -21,6 +21,15 @@ export const useBuildingsStore = defineStore('buildings', () => {
         });
     };
 
+    const update = async (bldg: Building) => {
+        const index = buildings.value.findIndex(b => b.whq == bldg.whq)
+        if (index > -1) {
+            const storable = JSON.parse(JSON.stringify(bldg))
+            buildings.value[index] = storable
+            await waitUntilFinished()
+        }
+    }
+
     const batchRemove = async (whq: string) => {
         const filtered = buildings.value.filter(b => b.facilityWhq !== whq);
         buildings.value = JSON.parse(JSON.stringify(filtered));
@@ -40,6 +49,7 @@ export const useBuildingsStore = defineStore('buildings', () => {
     return {
         buildings,
         batchRemove,
-        batchAdd
+        batchAdd,
+        update
     }
 })
