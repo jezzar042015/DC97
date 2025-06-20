@@ -1,15 +1,16 @@
 <template>
-    <ModalWrapper @click="emits('close')">
-        <div class="bg-white w-full p-4 mt-5">
-            <div class="min-h-44">
+    <ModalWrapper>
+        <div class="bg-white w-full h-full p-4 mt-10">
+            <div class="flex flex-col min-h-52">
                 <div>{{ elem.name }}</div>
                 <div class="text-xl font-bold">{{ elem.component }}</div>
                 <hr class="border-amber-400 mt-2">
                 <div v-if="dictionary">
                     <p class="py-2 font-medium">{{ dictionary.defination }}</p>
 
-                    <div v-if="dictionary.photos">
-                        <img v-for="img in dictionary.photos" :src="`/${img}`" :alt="img">
+                    <div v-if="dictionary.photos" class="space-y-2">
+                        <img class="w-full" v-for="img in dictionary.photos" :src="`/facility-components/${img}`"
+                            :alt="img">
                     </div>
                 </div>
 
