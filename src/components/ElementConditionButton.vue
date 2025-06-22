@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
     import { useRipple } from '@/composables/useRipple';
-    import { defineProps, defineEmits, computed } from 'vue'
+    import { defineEmits, computed } from 'vue'
     import type { ConditionNumber } from '@/types/element';
     import Ripple from './Ripple.vue';
     import type { RippleColor } from '@/data/lib/themes';

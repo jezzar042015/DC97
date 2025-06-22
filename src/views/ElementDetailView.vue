@@ -1,7 +1,8 @@
 <template>
     <main class="h-screen bg-gray-100">
         <div ref="swipe-target" class="px-4 pt-12 pb-24 space-y-3" v-if="elementStore.element">
-            <div class="space-y-3 p-6 shadow bg-white">
+            <div class="space-y-3 p-6 shadow bg-white relative">
+                <span class="absolute right-3 top-2 text-xs">{{ currentIndex + 1 }} of {{ totalElements }}</span>
                 <div class="flex space-x-2 items-center">
                     <LeftArrow class="h-5" @click="gotoSurveySummary" />
                     <div class="text-xl">ELEMENT EVALUATION</div>
@@ -47,7 +48,6 @@
     import { useFacilityStore } from '@/stores/facility'
     import { useFacilitiesStore } from '@/stores/facilities'
     import type { Element } from '@/types/element'
-    import type { Facility } from '@/types/facility'
     import type { FormMode } from '@/data/lib/form'
 
     import DetailItemValue from '@/components/DetailItemValue.vue'
@@ -66,6 +66,7 @@
 
     const nextElement = ref<Element | undefined>()
     const prevElement = ref<Element | undefined>()
+    const currentIndex = ref<number>(0)
 
     const facility = computed(() => {
         return facilitiesStore.facilities.find(f => f.whq === elementStore.element?.whq)
@@ -102,11 +103,15 @@
         }
     }
 
-    const findElementSiblings = (index: number) => {
+    const findElementSiblings = () => {
         const elements = facilityStore.elements
-        nextElement.value = elements[index + 1] ?? undefined
-        prevElement.value = index > 0 ? elements[index - 1] : undefined
+        nextElement.value = elements[currentIndex.value + 1] ?? undefined
+        prevElement.value = currentIndex.value > 0 ? elements[currentIndex.value - 1] : undefined
     }
+
+    const totalElements = computed(() => {
+        return facilityStore.elements.length
+    })
 
     const swipeEl = useTemplateRef('swipe-target')
     const { direction, isSwiping } = useSwipe(swipeEl)
@@ -157,8 +162,8 @@
         () => elementStore.element,
         (element) => {
             if (!element) return
-            const index = facilityStore.elements.findIndex(e => e.srcRow === element.srcRow)
-            findElementSiblings(index)
+            currentIndex.value = facilityStore.elements.findIndex(e => e.srcRow === element.srcRow)
+            findElementSiblings()
         }
     )
 

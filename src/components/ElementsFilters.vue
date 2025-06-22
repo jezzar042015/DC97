@@ -5,30 +5,26 @@
                 :value="keyWords" @input="onInput">
             <div>
                 <button class="bg-white shadow py-4 px-5 text-sm rounded-sm whitespace-nowrap flex-1"
-                    @click="toggleFilters">
+                    @click="showFilterForm">
                     Filters
                 </button>
             </div>
         </div>
-        <div v-if="filters" class="bg-white shadow rounded-sm p-3">
-            <div class="flex flex-col">
-                <label for="">Facility</label>
-                <select name="" id="" class="">
-                    <option :value="''">All Facilities</option>
-                </select>
-            </div>
 
+        <div v-if="false" class="bg-white shadow rounded-sm p-3">
+            <!-- Filters here -->
         </div>
+
     </div>
 </template>
 
 <script setup lang="ts">
     import { ref, watch } from 'vue';
 
-    const emits = defineEmits(['update-search']);
+    const emits = defineEmits(['update-search', 'show-filter-form']);
 
     const filters = ref(true)
-    const toggleFilters = () => filters.value = !filters.value
+    const showFilterForm = () => emits('show-filter-form')
 
     const props = defineProps<{
         keywords: string
