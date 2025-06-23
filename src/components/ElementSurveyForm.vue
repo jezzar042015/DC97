@@ -128,6 +128,11 @@
         )
     })
 
+    const designAdjustedYear = computed(() => {
+        if (!currentSurvey.value) return 0
+        return element.life - (currentSurvey.value.year - (form.value.lastYear ?? 0))
+    })
+
     const form = ref<ElementSurvey>({
         srcRow: 0,
         whq: '',
@@ -190,6 +195,7 @@
             form.value.surveyKey = n.uniqueKey
             form.value.remainingYears = element.life - (n.year - (form.value.lastYear ?? 0))
             form.value.adjRemainingYears = form.value.remainingYears
+
         },
         {
             immediate: true
@@ -202,6 +208,16 @@
         (n) => {
             form.value.remainingYears = element.life - (currentSurvey.value?.year ?? 0 - (n ?? 0))
             form.value.adjRemainingYears = form.value.remainingYears
+        }
+    )
+
+    watch(() => form.value.condition,
+        (n) => {
+            if (n == 4) {
+                form.value.adjRemainingYears = 0
+            } else {
+                form.value.adjRemainingYears = designAdjustedYear.value
+            }
         }
     )
 
