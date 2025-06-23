@@ -18,8 +18,10 @@
                 <div>
                     <hr class="border-dotted border-gray-300 my-2">
                     <span class="text-gray-700">Element Information</span>
-                    <textarea class="text-blue-500 font-medium w-full border border-gray-200 outline-0 p-2" type="text"
-                        v-model="form.information"></textarea>
+                    <textarea
+                        class="text-blue-500 font-medium w-full border border-gray-200 outline-0 p-2 overflow-hidden resize-none"
+                        ref="autoTextarea" @input="resize" v-model="form.information" rows="1">
+                    </textarea>
                 </div>
 
                 <div>
@@ -159,6 +161,16 @@
         addAsCompleted(property)
     }
 
+    const autoTextarea = ref<HTMLTextAreaElement | null>(null)
+
+    const resize = () => {
+        const el = autoTextarea.value
+        if (el) {
+            el.style.height = 'auto' 
+            el.style.height = `${el.scrollHeight}px` 
+        }
+    }
+
     const confirm = async () => {
         const storable = JSON.parse(JSON.stringify(form.value))
         if (mode == 'new') {
@@ -202,12 +214,11 @@
         }
     );
 
-    // TODO: Erronous Here
     watch(
         () => form.value.lastYear,
         (n) => {
-            form.value.remainingYears = element.life - (currentSurvey.value?.year ?? 0 - (n ?? 0))
-            form.value.adjRemainingYears = form.value.remainingYears
+            form.value.remainingYears = designAdjustedYear.value
+            form.value.adjRemainingYears = designAdjustedYear.value
         }
     )
 
@@ -222,11 +233,18 @@
     )
 
     onMounted(() => {
+        resize()
+
         if (mode == 'update') {
             completedItems.value = [
                 'qty', 'lastYear', 'adjRemainingYears', 'condition'
             ]
+        } else if (mode == 'new') {
+            completedItems.value = [
+                'condition'
+            ]
         }
+
     })
 
 </script>

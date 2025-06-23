@@ -6,14 +6,17 @@
                     <h3 class="font-bold text-xl uppercase pb-2">Facility Details</h3>
                     <hr class="border-amber-400">
                 </div>
+                
                 <DetailItemValue label="Location Address" :value="facilityStore.facility.location" />
                 <DetailItemValue label="Primary Use" :value="facilityStore.facility.primaryUse" />
                 <DetailItemValue label="WHQ Number" :value="facilityStore.facility.whq" />
+                
                 <div class="flex space-x-4">
                     <DetailItemValue label="Buildings" :value="facilityStore.facility.buildings" />
                     <DetailItemValue label="Auditoriums" :value="facilityStore.facility.auditoriums" />
                     <DetailItemValue label="Congregations" :value="facilityStore.facility.congregations" />
                 </div>
+                
                 <div class="flex space-x-4">
                     <DetailItemValue label="Climate" :value="facilityStore.facility.climate" />
                     <DetailItemValue label="Units of Measurement" :value="facilityStore.facility.measurements" />
@@ -31,19 +34,30 @@
                 <hr class="border-amber-400 mx-5">
 
                 <div class="py-2">
+                    <FacilitySurveyItem v-if="currentFev" :survey="currentFev"
+                        @click="viewSurveyItems(currentFev.uniqueKey)" />
+
                     <FacilitySurveyItem v-if="previousFev" :survey="previousFev"
                         @click="viewSurveyItems(previousFev.uniqueKey)" />
 
-                    <FacilitySurveyItem v-if="currentFev" :survey="currentFev"
-                        @click="viewSurveyItems(currentFev.uniqueKey)" />
                 </div>
 
 
             </div>
-            <div class="p-3 shadow bg-white">
-                <button class="p-4 text-center w-full bg-red-400 rounded text-white" @click="loadDeleteConfirmation">
-                    Delete this DC-97
-                </button>
+            <div class="py-5 shadow bg-white">
+                <h3 class="font-bold text-xl uppercase pb-2 px-5">Actions</h3>
+                <hr class="border-amber-400 mx-5">
+
+                <div class="py-3 px-5 space-y-3">
+                    <button class="p-4 text-center w-full bg-gray-100 rounded shadow outline-0">
+                        Export Facility Back-up
+                    </button>
+
+                    <button class="p-4 text-center w-full bg-red-400 rounded text-white outline-0"
+                        @click="loadDeleteConfirmation">
+                        Delete this DC-97
+                    </button>
+                </div>
             </div>
         </div>
     </main>
