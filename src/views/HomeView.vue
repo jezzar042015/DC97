@@ -30,7 +30,7 @@
               </li>
             </ul>
             <div v-if="facilitiesStore.facilities.length === 0"
-              class="mt-15 text-gray-500 border bg-yellow-50 border-gray-100 rounded p-3">
+              class="mt-15 text-center text-gray-500 border bg-white border-gray-100 rounded px-3 py-5">
               No facilities were added yet! Start by importing a DC-97.
             </div>
           </div>

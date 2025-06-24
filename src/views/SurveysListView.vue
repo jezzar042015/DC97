@@ -1,11 +1,14 @@
 <template>
-    <main class="h-full bg-gray-100">
+    <main class="h-screen bg-gray-100">
         <div class="px-4 pt-12 pb-24 min-h-full">
-            <div class="space-y-5">
+            <div class="space-y-5" v-if="surveysStore.orderedList.length > 0">
                 <div @click="loadSurvey(survey)" v-for="survey in surveysStore.orderedList" :key="survey.uniqueKey"
                     class="border-t-6 border-t-orange-500">
                     <FacilitySurveyCard :survey="survey" :showheader="false" />
                 </div>
+            </div>
+            <div v-else class="mt-15 text-center text-gray-500 border bg-white border-gray-100 rounded px-3 py-5">
+                No facility evaluations found!
             </div>
         </div>
     </main>

@@ -1,13 +1,23 @@
 <template>
     <main class="h-screen bg-gray-100">
         <div class="px-4 pb-4 pt-12 h-full space-y-2">
-            <ElementsFilters :keywords="keyWords" @update-search="updateSearch" @show-filter-form="showFilterForm" />
-            <div class="px-4 bg-white">
-                <p class="text-xs text-right pt-2">{{ filtered.length }} items</p>
-                <template v-for="element in filtered" :key="`${element.whq}_${element.srcRow}`">
-                    <ElementListItem :element="element" @click="viewElement(element.whq, element.srcRow)" />
-                </template>
+            <div v-if="filtered.length !== 0">
+                <ElementsFilters :keywords="keyWords" @update-search="updateSearch"
+                    @show-filter-form="showFilterForm" />
+                <div class="px-4 mt-2 pb-15 bg-white">
+                    <p class="text-xs text-right pt-2">{{ filtered.length }} items</p>
+                    <template v-for="element in filtered" :key="`${element.whq}_${element.srcRow}`">
+                        <ElementListItem :element="element" @click="viewElement(element.whq, element.srcRow)" />
+                    </template>
+                </div>
             </div>
+            <div v-else class="mt-15 text-center text-gray-500 border bg-white border-gray-100 rounded px-3 py-5">
+                No facility elements found!
+            </div>
+        </div>
+
+        <div>
+
         </div>
 
     </main>

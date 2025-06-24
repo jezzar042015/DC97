@@ -12,7 +12,7 @@
             <DetailItemValue label="Evaluation Date" :value="evaluationDate" />
             <DetailItemValue label="Evaluation Year" :value="survey.year" />
         </div>
-        <DetailItemValue label="Evaluation Description" :value="survey.description" :bold="false" />
+        <DetailItemValue label="Evaluation Description" :value="survey.description ?? '-'" :bold="false" />
 
         <Ripple v-for="ripple in ripples" :key="ripple.id" :id="ripple.id" :x="ripple.x" :y="ripple.y"
             :size="ripple.size" @remove="removeRipple" />
