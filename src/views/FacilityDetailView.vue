@@ -1,22 +1,22 @@
 <template>
-    <main class="h-full bg-gray-100">
+    <main class="h-full">
         <div class="px-4 pb-24 pt-12 space-y-3">
             <div v-if="facilityStore.facility" class="space-y-3 p-5 shadow bg-white">
                 <div>
                     <h3 class="font-bold text-xl uppercase pb-2">Facility Details</h3>
                     <hr class="border-amber-400">
                 </div>
-                
+
                 <DetailItemValue label="Location Address" :value="facilityStore.facility.location" />
                 <DetailItemValue label="Primary Use" :value="facilityStore.facility.primaryUse" />
                 <DetailItemValue label="WHQ Number" :value="facilityStore.facility.whq" />
-                
+
                 <div class="flex space-x-4">
                     <DetailItemValue label="Buildings" :value="facilityStore.facility.buildings" />
                     <DetailItemValue label="Auditoriums" :value="facilityStore.facility.auditoriums" />
                     <DetailItemValue label="Congregations" :value="facilityStore.facility.congregations" />
                 </div>
-                
+
                 <div class="flex space-x-4">
                     <DetailItemValue label="Climate" :value="facilityStore.facility.climate" />
                     <DetailItemValue label="Units of Measurement" :value="facilityStore.facility.measurements" />

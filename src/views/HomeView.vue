@@ -1,5 +1,5 @@
 <template>
-  <main class="h-screen bg-gray-50">
+  <main class="h-screen">
     <div class="px-5 pb-4 pt-12 h-full">
 
       <div class="space-y-2 flex flex-col justify-between h-full flex-1">
@@ -24,7 +24,7 @@
 
           </div>
           <div class="mt-4">
-            <ul class="space-y-2">
+            <ul class="space-y-2 lg:grid lg:grid-cols-2 lg:gap-x-2">
               <li v-for="facility in facilitiesStore.facilities" :key="facility.whq" @click="loadDetail(facility.whq)">
                 <FacilityListItem :facility="facility" />
               </li>

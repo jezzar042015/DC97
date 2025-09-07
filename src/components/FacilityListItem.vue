@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 py-5 shadow-lg bg-white rounded-sm space-y-0 relative overflow-hidden transition-all duration-300 active:scale-[0.98]"
+    <div class="px-4 py-5 shadow-lg bg-white rounded-sm space-y-0 relative overflow-hidden transition-all duration-300 active:scale-[0.98] lg:min-h-28"
         @click="handleClick">
         <div class="flex justify-between">
             <span class="text-sm uppercase">{{ facility.primaryUse }}</span>

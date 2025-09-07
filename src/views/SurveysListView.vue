@@ -1,5 +1,5 @@
 <template>
-    <main class="h-screen bg-gray-100">
+    <main class="h-screen">
         <div class="px-4 pt-12 pb-24 min-h-full">
             <div class="space-y-5" v-if="surveysStore.orderedList.length > 0">
                 <div @click="loadSurvey(survey)" v-for="survey in surveysStore.orderedList" :key="survey.uniqueKey"
