@@ -48,12 +48,14 @@
                 <h3 class="font-bold text-xl uppercase pb-2 px-5">Actions</h3>
                 <hr class="border-amber-400 mx-5">
 
-                <div class="py-3 px-5 space-y-3">
-                    <button class="p-4 text-center w-full bg-gray-100 rounded shadow outline-0">
+                <div class="py-3 px-5 space-y-3 md:flex space-x-3">
+                    <button
+                        class="p-4 text-center w-full bg-gray-100 rounded shadow outline-0 h-full disabled:text-gray-400"
+                        disabled>
                         Export Facility Back-up
                     </button>
 
-                    <button class="p-4 text-center w-full bg-red-400 rounded text-white outline-0"
+                    <button class="p-4 text-center w-full bg-red-400 rounded shadow text-white outline-0 h-full"
                         @click="loadDeleteConfirmation">
                         Delete this DC-97
                     </button>

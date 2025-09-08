@@ -1,7 +1,7 @@
 <template>
     <main class="h-screen">
         <div class="px-4 pt-12 pb-24 min-h-full">
-            <div class="space-y-5" v-if="surveysStore.orderedList.length > 0">
+            <div class="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3" v-if="surveysStore.orderedList.length > 0">
                 <div @click="loadSurvey(survey)" v-for="survey in surveysStore.orderedList" :key="survey.uniqueKey"
                     class="border-t-6 border-t-orange-500">
                     <FacilitySurveyCard :survey="survey" :showheader="false" />

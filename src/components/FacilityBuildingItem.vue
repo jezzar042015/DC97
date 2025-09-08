@@ -1,5 +1,5 @@
 <template>
-    <div class="px-3 py-2 shadow relative overflow-hidden transition-all duration-300 active:scale-[0.98]"
+    <div class="px-3 py-2 shadow relative overflow-hidden transition-all duration-300 active:scale-[0.98] h-full"
         @click="handleClick">
         <div class="space-y-3">
             <div class="text-orange-400">

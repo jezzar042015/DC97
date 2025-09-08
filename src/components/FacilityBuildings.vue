@@ -1,5 +1,5 @@
 <template>
-    <div class="py-2 px-2 space-y-3">
+    <div class="py-2 px-2 space-y-3 lg:grid lg:grid-cols-2 lg:gap-3">
         <template v-for="(bldg, i) in buildings" :key="bldg.whq">
             <FacilityBuildingItem :bldg="bldg" :i="i" />
         </template>

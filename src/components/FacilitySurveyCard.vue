@@ -1,5 +1,5 @@
 <template>
-    <div :class="['space-y-3 p-5 shadow bg-white relative overflow-hidden transition-all duration-300',
+    <div :class="['space-y-3 p-5 shadow bg-white relative overflow-hidden transition-all duration-300 h-full',
         { 'active:scale-[0.98]': !showheader }]" @click="handleClick">
         <div v-if="showheader">
             <h3 class="font-bold text-xl uppercase pb-2">Evaluation Details</h3>
